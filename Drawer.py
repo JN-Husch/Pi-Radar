@@ -3,8 +3,7 @@ from pygame import gfxdraw
 import Classes
 import math
 
-def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,font):
-    
+def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts):
     if raw_tgts is not None:
         for tgt in raw_tgts:
             if tgt.dis < dis_range * 5:
@@ -21,9 +20,9 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,font):
                     #tgt.drawn = True
                     raw_tgts.remove(tgt)
     if mode == 1:
-        AnalogDraw(screen,rdr_tgts,dis_range,sweep_angle,font)
+        AnalogDraw(screen,rdr_tgts,dis_range,sweep_angle,fonts)
     elif mode == 2:
-        DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle,font)
+        DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle,fonts)
 
 def AnalogDraw(screen,rdr_tgts,dis_range,sweep_angle,fonts):
     screen.fill([37,37,37])
@@ -141,3 +140,9 @@ def DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle,fonts):
     line_x = screen.get_width() / 2 + math.sin(sweep_angle * math.pi / 180) * 500
     line_y = screen.get_height() / 2 - math.cos(sweep_angle * math.pi / 180) * 500
     pygame.draw.line(screen,color=[50, 205, 50],start_pos=[screen.get_width() / 2, screen.get_height() / 2],end_pos=[line_x, line_y], width=2)
+
+def DrawConfigError(screen,fonts):
+        img = fonts[0].render("ERROR IN radar.cfg File", True, [255, 0, 0])
+        screen.blit(img, (screen.get_width() / 2 - 100, screen.get_height() / 2))
+        img = fonts[0].render("Please check configuration!", True, [255, 255, 255])
+        screen.blit(img, (screen.get_width() / 2 - 115, screen.get_height() / 2 + 25))

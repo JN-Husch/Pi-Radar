@@ -6,6 +6,8 @@ import DataFetcher
 import Classes
 import Drawer
 import threading
+import os
+import shutil
 
 # pygame setup
 pygame.init()
@@ -16,7 +18,7 @@ dt = 0
 
 path_mod = ""
 
-if True:
+if os.name != 'nt':
     path_mod = "/home/pi/Desktop/Radar/"
     screen = pygame.display.set_mode((1080, 1080),pygame.FULLSCREEN)
     pygame.mouse.set_visible(False)
@@ -44,37 +46,43 @@ raw_tgts = []
 raw_tgts_new = []
 
 run = True
+config_ok = False
 
-with open(path_mod + 'radar.cfg') as f:
-    lines = f.readlines()
-try:
-    if len(lines) > 0:
-        for line in lines:
-            if "FEEDER_URL=" in line:
-                url = line.split("=")[1].replace("\"","")
-            if "RADAR_MODE=" in line:
-                mode = int(line.split("=")[1])
-            if "LAT=" in line:
-                homePos.lat = float(line.split("=")[1])
-            if "LNG=" in line:
-                homePos.lng = float(line.split("=")[1])
-            if "RANGE=" in line:
-                zoom = int(line.split("=")[1])
-                if zoom == 2:
-                    dis_range = 10
-                elif zoom == 3:
-                    dis_range = 20
-                elif zoom == 4:
-                    dis_range == 40
-                else:
-                    dis_range = 5
-                
-except:
-    print("Error reading radar.cfg!")
+if os.path.exists(path_mod + 'radar.cfg'):
+    with open(path_mod + 'radar.cfg') as f:
+        lines = f.readlines()
+    try:
+        if len(lines) > 0:
+            for line in lines:
+                if "FEEDER_URL=" in line:
+                    url = line.split("=")[1].replace("\"","")
+                if "RADAR_MODE=" in line:
+                    mode = int(line.split("=")[1])
+                if "LAT=" in line:
+                    homePos.lat = float(line.split("=")[1])
+                if "LNG=" in line:
+                    homePos.lng = float(line.split("=")[1])
+                if "RANGE=" in line:
+                    zoom = int(line.split("=")[1])
+                    if zoom == 2:
+                        dis_range = 10
+                    elif zoom == 3:
+                        dis_range = 20
+                    elif zoom == 4:
+                        dis_range == 40
+                    else:
+                        dis_range = 5
+        config_ok = True
+
+    except:
+        print("Error reading radar.cfg!")
+else:
+    print("radar.cfg does not exist!")
 
 def DataProcessing():
     global raw_tgts_new
-    raw_tgts_new = DataFetcher.fetchADSBData(homePos,url)
+    if config_ok:
+        raw_tgts_new = DataFetcher.fetchADSBData(homePos,url)
 
 def DataDrawing():
     global raw_tgts
@@ -89,8 +97,10 @@ def DataDrawing():
             if event.type == pygame.QUIT:
                 run = False
 
-        Drawer.Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts)
-
+        if config_ok:
+            Drawer.Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts)
+        else:
+            Drawer.DrawConfigError(screen,fonts)
     
         keys = pygame.key.get_pressed()
         if keys[pygame.K_PLUS] and dis_range <= 20:
