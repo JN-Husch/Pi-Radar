@@ -2,7 +2,6 @@
 
 Pi Radar is a Python project to display basic ADS-B information from a local receiver on a Raspberry Pi.
 
-<br/>
 
 ## Hardware Suggestions
 
