@@ -35,16 +35,64 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
                     rdr_tgt.spd = tgt.spd
                     rdr_tgt.age = tgt.time
                     rdr_tgt.cls = tgt.flt
+
+                    sze = 2
+                    if tgt.cat == "A1":
+                        sze = 2
+                    elif tgt.cat == "A2":
+                        sze = 3
+                    if tgt.cat == "A3":
+                        sze = 4
+                    if tgt.cat == "A4":
+                        sze = 4
+                    if tgt.cat == "A5":
+                        sze = 5
+                    rdr_tgt.sze = sze
+
                     rdr_tgts.append(rdr_tgt)
                     raw_tgts.remove(tgt)
 
-    if mode == 1:
-        AnalogDraw(screen,rdr_tgts,dis_range,sweep_angle)
+    if mode == 0:
+        AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle)
+    elif mode == 1:
+        AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 2:
         DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle)
 
 
-def AnalogDraw(screen,rdr_tgts,dis_range,sweep_angle):
+def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
+    global fonts
+    col_mark = [205,205,205]
+    
+    #Handle Radar Targets
+    for rdr_tgt in rdr_tgts:
+        if rdr_tgt.age < 10:
+            col = [round(20 * rdr_tgt.fade / 1000,0) + 37, round(190 * rdr_tgt.fade / 1000,0) + 37, round(20 * rdr_tgt.fade / 1000,0) + 37]
+            sta_pos_x = rdr_tgt.pos_x + math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            sta_pos_y = rdr_tgt.pos_y + math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            end_pos_x = rdr_tgt.pos_x - math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            end_pos_y = rdr_tgt.pos_y - math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            pygame.draw.line(screen,color=col,start_pos=[sta_pos_x, sta_pos_y],end_pos=[end_pos_x, end_pos_y], width=rdr_tgt.sze)
+
+        rdr_tgt.fade = rdr_tgt.fade * 0.9975
+        if rdr_tgt.fade < 10:
+            rdr_tgts.remove(rdr_tgt)
+
+    #Draw Scan Bar
+    for i in range (0,20):
+        j = 20 - i
+        line_x = screen.get_width() / 2 + math.sin((sweep_angle - j / 5) * math.pi / 180) * 540
+        line_y = screen.get_height() / 2 - math.cos((sweep_angle - j / 5) * math.pi / 180) * 540
+        col_scan = [39 + 11 * i / 20, 39 + 211 * i / 20, 39 + 11 * i / 20]
+        pygame.draw.line(screen,color=col_scan,start_pos=[screen.get_width() / 2, screen.get_height() / 2],end_pos=[line_x, line_y], width=3)
+
+    DrawMarkings(screen,fonts,col_mark,dis_range)
+    
+    #Draw Center Circle
+    pygame.draw.circle(screen,color=col_mark,center=[screen.get_width() / 2, screen.get_height() / 2], radius=3)
+
+
+def AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
     col_mark = [205,205,205]
     

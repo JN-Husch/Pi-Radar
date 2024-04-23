@@ -38,6 +38,7 @@ def fetchADSBData(homePos,url):
             tgt.alt = a.get("alt_geom")
             tgt.spd = a.get("gs")
             tgt.trk = a.get("track")
+            tgt.cat = a.get("category")
 
             seen_pos = a.get("seen_pos")
 
