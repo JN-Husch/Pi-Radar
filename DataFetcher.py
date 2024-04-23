@@ -1,9 +1,8 @@
-from contextlib import closing
-from urllib.request import Request, urlopen
-import json
 import math
 import Classes
-import socket
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
     #tgtHist
     # 0. Time
@@ -21,15 +20,19 @@ import socket
 
 
 def fetchADSBData(homePos,url):
-    socket.setdefaulttimeout(2)
-    request_site = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-
     tgts = []
 
     try:
-        with closing(urlopen(request_site)) as aircraft_file:
-            aircraft_data = json.load(aircraft_file)
 
+        #session = requests.Session()
+        #retry = Retry(connect=3, backoff_factor=0.5)
+        #adapter = HTTPAdapter(max_retries=retry)
+        #session.mount('http://', adapter)
+        #session.mount('https://', adapter)
+        #session.get(url)
+
+        r = requests.get(url, timeout=4)
+        aircraft_data = r.json()
 
         for a in aircraft_data["aircraft"]:
             timestmp = aircraft_data.get("now")
@@ -84,8 +87,8 @@ def fetchADSBData(homePos,url):
            
 
         return tgts
-    except:
-        print("Error")
+    except Exception as error:
+        print("Data Download Error: ", error)
         return None
 
 def AngleCalc(homePos,alt_buff, lat_buff, lng_buff):
