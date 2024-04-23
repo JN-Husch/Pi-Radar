@@ -26,7 +26,7 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     if raw_tgts is not None:
         for tgt in raw_tgts:
             if tgt.dis < dis_range * 5:
-                if not tgt.drawn and sweep_angle > tgt.ang and sweep_angle < tgt.ang + 1:
+                if not tgt.drawn and sweep_angle > tgt.ang and sweep_angle <= tgt.ang + 0.9:
                     rdr_tgt = Classes.RadarTarget()
                     rdr_tgt.pos_x = screen.get_width() / 2 + math.sin(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range
                     rdr_tgt.pos_y = screen.get_height() / 2 - math.cos(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range
@@ -36,7 +36,6 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
                     rdr_tgt.age = tgt.time
                     rdr_tgt.cls = tgt.flt
                     rdr_tgts.append(rdr_tgt)
-                    #tgt.drawn = True
                     raw_tgts.remove(tgt)
 
     if mode == 1:
@@ -95,9 +94,9 @@ def DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle):
                 if rdr_tgt.trk >= 270 or rdr_tgt.trk <= 90:
                     label_offset_y = 10
                 screen.blit(img, (rdr_tgt.pos_x - 20, rdr_tgt.pos_y + label_offset_y))
-        
+
         #Remove old targets ahead of sweep bar
-        if sweep_angle > rdr_tgt.ang - 5 and sweep_angle < rdr_tgt.ang:
+        if sweep_angle > rdr_tgt.ang - 1 and sweep_angle < rdr_tgt.ang:
             rdr_tgts.remove(rdr_tgt) 
 
     #Draw Scan Bar

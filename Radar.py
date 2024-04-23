@@ -134,17 +134,21 @@ def DataDrawing():
             if not b_key_plus_pressed:
                 dis_range = dis_range * 2
                 b_key_plus_pressed = True
+                if mode == 2:
+                    rdr_tgts.clear()
         else:
             b_key_plus_pressed = False
         if keys[pygame.K_MINUS] and dis_range >= 10:
             if not b_key_minus_pressed:
                 dis_range = int(round(dis_range / 2,0))
                 b_key_minus_pressed = True
+                if mode == 2:
+                    rdr_tgts.clear()
         else:
             b_key_minus_pressed = False
         
         pygame.display.flip()
-        dt = clock.tick(60) / 1000
+        dt = clock.tick(40) / 1000
 
         fps = round(clock.get_fps(),0)
 
@@ -156,11 +160,12 @@ def DataDrawing():
                 mode += 1
             else:
                 mode -= 1
+            rdr_tgts.clear()
         
         if event.type == pygame.MOUSEBUTTONUP:
             mouse_down[0] = False
         
-        sweep_angle += 0.6
+        sweep_angle += 0.9
         if raw_tgts_new is None:
             if sweep_angle > 180 and sweep_angle < 180 + 40 * dt:
                 t3 = threading.Thread(target=task1)
@@ -172,8 +177,6 @@ def DataDrawing():
             sweep_angle = 0
             t2 = threading.Thread(target=task1)
             t2.start()
-        
-
 
 def task1():
     DataProcessing()

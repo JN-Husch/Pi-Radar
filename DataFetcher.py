@@ -23,14 +23,6 @@ def fetchADSBData(homePos,url):
     tgts = []
 
     try:
-
-        #session = requests.Session()
-        #retry = Retry(connect=3, backoff_factor=0.5)
-        #adapter = HTTPAdapter(max_retries=retry)
-        #session.mount('http://', adapter)
-        #session.mount('https://', adapter)
-        #session.get(url)
-
         r = requests.get(url, timeout=4)
         aircraft_data = r.json()
 
