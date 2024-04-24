@@ -163,13 +163,13 @@ def DataDrawing():
                                     opts.mode -= 1
                                     rdr_tgts.clear()
                             if UIElement.tag == "RNG_UP":
-                                if dis_range <= 20:
-                                    dis_range = dis_range * 2
+                                if opts.dis_range <= 20:
+                                    opts.dis_range = opts.dis_range * 2
                                     if opts.mode == 3:
                                         rdr_tgts.clear()
                             if UIElement.tag == "RNG_DN":
-                                if dis_range >= 10:
-                                    dis_range = int(round(dis_range / 2,0))
+                                if opts.dis_range >= 10:
+                                    opts.dis_range = int(round(opts.dis_range / 2,0))
                                     if opts.mode == 3:
                                         rdr_tgts.clear()
                             if UIElement.tag == "OPTIONS":
