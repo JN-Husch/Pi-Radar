@@ -136,22 +136,21 @@ def DataDrawing():
         
         if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.FINGERDOWN) and not mouse_down[0]:              
             mouse_down[0] = True            
-            
-            if not menu_modes[0]:
-                menu_modes[0] = True
-                menu_level = 0
+
 
             mousePos = pygame.mouse.get_pos()
+
+            UIHit = False
 
             for UIElement in UIElements:
                 if isinstance(UIElement, Classes.Button):
                     if UIElement.rect.collidepoint(mousePos):
+                        UIHit = True
                         if UIElement.tag =="RETURN":
                             if menu_level > 0:
                                 menu_level -= 1
                             else:
-                             menu_modes[0] = False
-                        
+                                UIHit = False # Fake UI not Hit to perform exit from menu                        
                         if menu_level == 0:
                             if UIElement.tag == "EXIT":
                                 run = False
@@ -187,7 +186,15 @@ def DataDrawing():
                             
                             if "SAVE" in UIElement.tag:
                                 Menu.SaveOptions(path_mod,opts)
-   
+
+            if not UIHit and menu_modes[0]:
+                menu_modes[0] = False
+                menu_level = 0
+            
+            elif not menu_modes[0]:
+                menu_modes[0] = True
+                menu_level = 0
+        
         if event.type == pygame.MOUSEBUTTONUP or event.type == pygame.FINGERUP:
             mouse_down[0] = False
 
