@@ -102,7 +102,7 @@ def DataDrawing():
             if not b_key_plus_pressed:
                 opts.dis_range = opts.dis_range * 2
                 b_key_plus_pressed = True
-                if optsmode == 3:
+                if opts.mode == 3:
                     rdr_tgts.clear()
         else:
             b_key_plus_pressed = False
