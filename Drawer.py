@@ -18,18 +18,23 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     screen.fill(col_back)
     #Draw Grid Lines
     grid_space = 100
-    if opts[1]:
+    if opts.grid:
         for i in range (-7,7):
             pygame.draw.line(screen,color=[50,50,50],start_pos=[0,screen.get_height() / 2 + grid_space * i + 1],end_pos=[screen.get_width(),screen.get_height() / 2 + grid_space * i + 1],width=1)
             pygame.draw.line(screen,color=[50,50,50],start_pos=[screen.get_width() / 2 + grid_space * i + 1,0],end_pos=[screen.get_width() / 2 + grid_space * i + 1,screen.get_height()],width=1)
+
+    conv_fact = 1
+    
+    if opts.metric:
+        conv_fact = 1.852
 
     if raw_tgts is not None:
         for tgt in raw_tgts:
             if tgt.dis < dis_range * 5:
                 if not tgt.drawn and sweep_angle > tgt.ang and sweep_angle <= tgt.ang + 0.9:
                     rdr_tgt = Classes.RadarTarget()
-                    rdr_tgt.pos_x = screen.get_width() / 2 + math.sin(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range
-                    rdr_tgt.pos_y = screen.get_height() / 2 - math.cos(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range
+                    rdr_tgt.pos_x = screen.get_width() / 2 + math.sin(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range * conv_fact
+                    rdr_tgt.pos_y = screen.get_height() / 2 - math.cos(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range * conv_fact
                     rdr_tgt.trk = tgt.trk
                     rdr_tgt.ang = tgt.ang
                     rdr_tgt.spd = tgt.spd
@@ -57,12 +62,35 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     elif mode == 1:
         AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 2:
+        AnalogDraw3(screen,rdr_tgts,dis_range,sweep_angle)
+    elif mode == 3:
         DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle)
 
 
 def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
     col_mark = [205,205,205]
+    
+    #Draw Scan Bar
+    for i in range (0,20):
+        j = 20 - i
+        line_x = screen.get_width() / 2 + math.sin((sweep_angle - j / 5) * math.pi / 180) * 500
+        line_y = screen.get_height() / 2 - math.cos((sweep_angle - j / 5) * math.pi / 180) * 500
+        col_scan = [39 + 11 * i / 20, 39 + 211 * i / 20, 39 + 11 * i / 20]
+        pygame.draw.line(screen,color=col_scan,start_pos=[screen.get_width() / 2, screen.get_height() / 2],end_pos=[line_x, line_y], width=3)
+
+    #Draw Radar Range Lines
+    for j in range (1,6):
+        for i in range (0,90):
+            ang = (- sweep_angle - i - 180) * math.pi / 180
+
+            center = [screen.get_width() / 2,screen.get_height() / 2]
+            rect = pygame.Rect(0, 1, 2, 3)
+            rect.center = center[0] - 100 * j, center[1] - 100 * j
+            rect.width = 200 * j
+            rect.height = 200 * j
+            col_scan = [39 + 11 * i / 90, 39 + 211 * i / 90, 39 + 11 * i / 90]
+            pygame.draw.arc(screen, col_scan, rect,ang, ang + 1 * math.pi / 180, 1)
     
     #Handle Radar Targets
     for rdr_tgt in rdr_tgts:
@@ -74,25 +102,47 @@ def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
             end_pos_y = rdr_tgt.pos_y - math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
             pygame.draw.line(screen,color=col,start_pos=[sta_pos_x, sta_pos_y],end_pos=[end_pos_x, end_pos_y], width=rdr_tgt.sze)
 
-        rdr_tgt.fade = rdr_tgt.fade * 0.9975
+        rdr_tgt.fade = rdr_tgt.fade * 0.98
         if rdr_tgt.fade < 10:
-            rdr_tgts.remove(rdr_tgt)
+            rdr_tgts.remove(rdr_tgt)  
 
-    #Draw Scan Bar
-    for i in range (0,20):
-        j = 20 - i
-        line_x = screen.get_width() / 2 + math.sin((sweep_angle - j / 5) * math.pi / 180) * 540
-        line_y = screen.get_height() / 2 - math.cos((sweep_angle - j / 5) * math.pi / 180) * 540
-        col_scan = [39 + 11 * i / 20, 39 + 211 * i / 20, 39 + 11 * i / 20]
-        pygame.draw.line(screen,color=col_scan,start_pos=[screen.get_width() / 2, screen.get_height() / 2],end_pos=[line_x, line_y], width=3)
-
-    DrawMarkings(screen,fonts,col_mark,dis_range)
     
     #Draw Center Circle
     pygame.draw.circle(screen,color=col_mark,center=[screen.get_width() / 2, screen.get_height() / 2], radius=3)
 
 
 def AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle):
+    global fonts
+    col_mark = [205,205,205]
+       
+    #Handle Radar Targets
+    for rdr_tgt in rdr_tgts:
+        if rdr_tgt.age < 10:
+            col = [round(20 * rdr_tgt.fade / 1000,0) + 37, round(190 * rdr_tgt.fade / 1000,0) + 37, round(20 * rdr_tgt.fade / 1000,0) + 37]
+            sta_pos_x = rdr_tgt.pos_x + math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            sta_pos_y = rdr_tgt.pos_y + math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            end_pos_x = rdr_tgt.pos_x - math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            end_pos_y = rdr_tgt.pos_y - math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            pygame.draw.line(screen,color=col,start_pos=[sta_pos_x, sta_pos_y],end_pos=[end_pos_x, end_pos_y], width=rdr_tgt.sze)
+
+        rdr_tgt.fade = rdr_tgt.fade * 0.998
+        if rdr_tgt.fade < 10:
+            rdr_tgts.remove(rdr_tgt)  
+
+    #Draw Scan Bar
+    for i in range (0,20):
+        j = 20 - i
+        line_x = screen.get_width() / 2 + math.sin((sweep_angle - j / 5) * math.pi / 180) * 500
+        line_y = screen.get_height() / 2 - math.cos((sweep_angle - j / 5) * math.pi / 180) * 500
+        col_scan = [39 + 11 * i / 20, 39 + 211 * i / 20, 39 + 11 * i / 20]
+        pygame.draw.line(screen,color=col_scan,start_pos=[screen.get_width() / 2, screen.get_height() / 2],end_pos=[line_x, line_y], width=3)
+
+    DrawMarkings(screen,fonts,col_mark,dis_range)
+
+    #Draw Center Circle
+    pygame.draw.circle(screen,color=col_mark,center=[screen.get_width() / 2, screen.get_height() / 2], radius=3)
+
+def AnalogDraw3(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
     col_mark = [205,205,205]
     
@@ -162,7 +212,7 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
 
         range_unit = "NM"
 
-        if opt[2]:
+        if opt.metric:
             range_unit ="KM"
 
         img = fonts[0].render(str(i * dis_range) + range_unit, True, col_mark)
@@ -216,16 +266,47 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
     screen.blit(img, (40, screen.get_height() / 2 - 15))
 
 
-def DrawDebugInfo(screen,fonts,mode,fps,timeouts):
+def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats):
     img = fonts[0].render("Mode:  " + str(mode), True, [250,250,250])
     screen.blit(img, (200,200))
     img = fonts[0].render("Rate:   " + str(fps) + "fps", True, [250,250,250])
     screen.blit(img, (200,225))
-    img = fonts[0].render("Errors:  " + str(timeouts), True, [250,250,250])
+    img = fonts[0].render("D/E/%:  " + str(dwnl_stats[0]) + " / " + str(dwnl_stats[1]) + " / " + str(round(dwnl_stats[1] / dwnl_stats[0] * 100,1)) + "%", True, [250,250,250])
     screen.blit(img, (200,250))
 
 def DrawConfigError(screen,fonts):
-        img = fonts[0].render("ERROR IN radar.cfg File", True, [255, 0, 0])
-        screen.blit(img, (screen.get_width() / 2 - 100, screen.get_height() / 2))
-        img = fonts[0].render("Please check configuration!", True, [255, 255, 255])
-        screen.blit(img, (screen.get_width() / 2 - 115, screen.get_height() / 2 + 25))
+    img = fonts[0].render("ERROR IN radar.cfg File", True, [255, 0, 0])
+    screen.blit(img, (screen.get_width() / 2 - 100, screen.get_height() / 2))
+    img = fonts[0].render("Please check configuration!", True, [255, 255, 255])
+    screen.blit(img, (screen.get_width() / 2 - 115, screen.get_height() / 2 + 25))
+
+def DrawUI(screen,fonts,UIElement):
+    if isinstance(UIElement, Classes.Button):
+        DrawButton(screen,fonts,UIElement)
+
+def DrawButton(screen,fonts,button):
+    #Draw Outer Rectangle
+    rect = pygame.Rect([button.pos[0] - 5, button.pos[1] - 5],[button.sze[0] + 10, button.sze[1] + 10])
+    pygame.draw.rect(screen,[100,100,100],rect)
+    button.rect = rect
+
+    #Draw Inner Rectangle
+    rect = pygame.Rect(button.pos,button.sze)
+    mousePos = pygame.mouse.get_pos()
+    
+    if button.high:
+        if rect.collidepoint(mousePos):
+            col = [0,225,0]
+        else:
+            col = [0,150,0]
+    else:
+        if rect.collidepoint(mousePos):
+            col = [225,225,225]
+        else:
+            col = [175,175,175]
+    pygame.draw.rect(screen,col,rect)
+
+    img = fonts[0].render(button.txt, True, [0, 0, 0])
+    screen.blit(img, (button.pos[0] + button.sze[0] / 2 - img.get_width() / 2,button.pos[1] + button.sze[1] / 2 - img.get_height() / 2))
+
+

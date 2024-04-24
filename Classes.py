@@ -1,3 +1,5 @@
+import pygame
+
 class Aircraft:
     hex = ""
     flt = ""
@@ -28,3 +30,29 @@ class HomePosition:
     lat = 0
     lng = 0
     alt = 0
+
+class Options:
+    debug = False
+    grid = False
+    metric = False
+    config_ok = False
+    mode = 0
+    homePos = HomePosition()
+    dis_range = 10
+    url = ""
+
+class Button:
+    def __init__(self,txt = "EMPTY!", pos = [0,0], sze = [100,50],tag = "UKN", highlight = False):
+        self.txt = txt
+        self.pos = pos
+        self.sze = sze
+        self.rect = None
+        self.tag = tag
+        self.high = highlight
+    
+    def CheckMousePos(self):
+        pygame.mouse.get_pos()
+
+class TextBox:
+    def __init__(self,txt = ""):
+        self.txt = txt

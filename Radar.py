@@ -1,14 +1,14 @@
 import pygame
 from pygame import gfxdraw
+from pygame.locals import *
 import time
 import math
 import DataFetcher
 import Classes
 import Drawer
+import Menu
 import threading
 import os
-import shutil
-from pygame.locals import *
 
 # pygame setup
 pygame.init()
@@ -21,7 +21,7 @@ path_mod = ""
 
 if os.name != 'nt':
     path_mod = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop') + "/Radar/"
-    #pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(False)
 
 
 font1 = pygame.font.Font(path_mod + "res/Arial.ttf", 20)
@@ -32,138 +32,89 @@ mouse_down = [False,False]
 
 t0 = time.time()
 
-mode = 1 #1 - Analog Radar, 2 - Digital Radar
+#mode = 1 #1 - Analog Radar, 2 - Digital Radar
 sweep_angle = 270
-dis_range = 10
+#dis_range = 10
 
 b_key_plus_pressed = False
 b_key_minus_pressed = False
 
 
-opts = [False, False, False]  #0 - Debug Info, 1 - Draw Grid Lines, 2 - Use Metric
+opts = Classes.Options()
 
-homePos = Classes.HomePosition()
+#homePos = Classes.HomePosition()
 
 rdr_tgts = []
 raw_tgts = []
 raw_tgts_new = []
 
 fps = 0
-timeouts = 0
+dwnl_stats = [1,0] #0 - Total Downloads, #1 - Errors
+
+menu_modes = [False,0,0] #0 - Open, 
+menu_level = 0
 
 run = True
-config_ok = False
+UIElements = []
 
-if os.path.exists(path_mod + 'radar.cfg'):
-    with open(path_mod + 'radar.cfg') as f:
-        lines = f.readlines()
-    try:
-        if len(lines) > 0:
-            for line in lines:
-                if "FEEDER_URL=" in line:
-                    url = line.split("=")[1].replace("\"","").strip()
-                if "RADAR_MODE=" in line:
-                    mode = int(line.split("=")[1].strip())
-                if "LAT=" in line:
-                    homePos.lat = float(line.split("=")[1].strip())
-                if "LNG=" in line:
-                    homePos.lng = float(line.split("=")[1].strip())
-                if "RANGE=" in line:
-                    zoom = int(line.split("=")[1].strip())
-                    if zoom == 2:
-                        dis_range = 10
-                    elif zoom == 3:
-                        dis_range = 20
-                    elif zoom == 4:
-                        dis_range == 40
-                    else:
-                        dis_range = 5
-                if "DEBUG=" in line:
-                    if line.split("=")[1].lower().strip() == "true":
-                        opts[0] = True
-                if "GRID_LINES=" in line:
-                    if line.split("=")[1].lower().strip() == "true":
-                        opts[1] = True
-                if "RANGE_IN_KM=" in line:
-                    if line.split("=")[1].lower().strip() == "true":
-                        opts[2] = True
+opts = Menu.LoadOptions(path_mod,opts)
 
-        config_ok = True
-
-    except:
-        print("Error reading radar.cfg!")
-else:
-    print("radar.cfg does not exist!")
+def Stop():
+    global run
+    run = False
 
 def DataProcessing():
     global raw_tgts_new
     global opts
-    global timeouts
+    global dwnl_stats
     
-    if config_ok:
-        raw_tgts_new = DataFetcher.fetchADSBData(homePos,url)
+    if opts.config_ok:
+        raw_tgts_new = DataFetcher.fetchADSBData(opts.homePos,opts.url)
+        dwnl_stats[0] += 1
         if raw_tgts_new is None:
-            timeouts += 1
+            dwnl_stats[1] += 1
 
 def DataDrawing():
-    global raw_tgts
-    global raw_tgts_new
-    global run
-    global dis_range
-    global sweep_angle
-    global screen
-    global fps
-    global mode
-    global opts 
-    global timeouts
+    global raw_tgts, raw_tgts_new
+    global run, screen, sweep_angle, menu_modes
+    global fps, opts
+    global UIElements
 
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        if config_ok:
-            Drawer.Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts,opts)
-            if opts[0]:
-                Drawer.DrawDebugInfo(screen,fonts,mode,fps,timeouts)
+        if opts.config_ok:
+            Drawer.Draw(opts.mode,screen,raw_tgts,rdr_tgts,opts.dis_range,sweep_angle,fonts,opts)
+            if opts.debug:
+                Drawer.DrawDebugInfo(screen,fonts,opts.mode,fps,dwnl_stats)
         else:
-            Drawer.DrawConfigError(screen,fonts)
-    
+            Drawer.DrawConfigError(screen,fonts)            
+        
+        if menu_modes[0]:
+            UIElements = Menu.Main(screen,fonts,menu_level,opts)
+            for UIElement in UIElements:
+                Drawer.DrawUI(screen,fonts,UIElement)
+
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_PLUS] and dis_range <= 20:
+        if keys[pygame.K_PLUS] and opts.dis_range <= 20:
             if not b_key_plus_pressed:
-                dis_range = dis_range * 2
+                opts.dis_range = opts.dis_range * 2
                 b_key_plus_pressed = True
-                if mode == 2:
+                if optsmode == 3:
                     rdr_tgts.clear()
         else:
             b_key_plus_pressed = False
-        if keys[pygame.K_MINUS] and dis_range >= 10:
+        
+        if keys[pygame.K_MINUS] and opts.dis_range >= 10:
             if not b_key_minus_pressed:
-                dis_range = int(round(dis_range / 2,0))
+                opts.dis_range = int(round(opts.dis_range / 2,0))
                 b_key_minus_pressed = True
-                if mode == 2:
+                if opts.mode == 3:
                     rdr_tgts.clear()
         else:
             b_key_minus_pressed = False
-        
-        pygame.display.flip()
-        dt = clock.tick(40) / 1000
-
-        fps = round(clock.get_fps(),0)
-
-        mouse_pos = pygame.mouse.get_pos()
-
-        if event.type == pygame.MOUSEBUTTONDOWN and not mouse_down[0]:
-            mouse_down[0] = True
-            if mouse_pos[0] > screen.get_width() / 2:
-                mode += 1
-            else:
-                mode -= 1
-            rdr_tgts.clear()
-        
-        if event.type == pygame.MOUSEBUTTONUP:
-            mouse_down[0] = False
         
         sweep_angle += 0.9
         if raw_tgts_new is None:
@@ -178,6 +129,68 @@ def DataDrawing():
             t2 = threading.Thread(target=task1)
             t2.start()
 
+        pygame.display.flip()
+        dt = clock.tick(40) / 1000
+        fps = round(clock.get_fps(),0)
+
+        
+        if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.FINGERDOWN) and not mouse_down[0]:              
+            mouse_down[0] = True            
+            
+            if not menu_modes[0]:
+                menu_modes[0] = True
+                menu_level = 0
+
+            mousePos = pygame.mouse.get_pos()
+
+            for UIElement in UIElements:
+                if isinstance(UIElement, Classes.Button):
+                    if UIElement.rect.collidepoint(mousePos):
+                        if UIElement.tag =="RETURN":
+                            if menu_level > 0:
+                                menu_level -= 1
+                            else:
+                             menu_modes[0] = False
+                        
+                        if menu_level == 0:
+                            if UIElement.tag == "EXIT":
+                                run = False
+                            if UIElement.tag == "MODE_UP":
+                                if opts.mode < 3:
+                                    opts.mode += 1
+                                    rdr_tgts.clear()
+                            if UIElement.tag == "MODE_DN":
+                                if opts.mode > 0:
+                                    opts.mode -= 1
+                                    rdr_tgts.clear()
+                            if UIElement.tag == "RNG_UP":
+                                if dis_range <= 20:
+                                    dis_range = dis_range * 2
+                                    if opts.mode == 3:
+                                        rdr_tgts.clear()
+                            if UIElement.tag == "RNG_DN":
+                                if dis_range >= 10:
+                                    dis_range = int(round(dis_range / 2,0))
+                                    if opts.mode == 3:
+                                        rdr_tgts.clear()
+                            if UIElement.tag == "OPTIONS":
+                                menu_level = 1
+                        elif menu_level == 1:
+                            if "DEBUG" in UIElement.tag:
+                               opts.debug = UIElement.tag.split("_")[1] == "True"
+                            
+                            if "GRID" in UIElement.tag:
+                                opts.grid = UIElement.tag.split("_")[1] == "True"
+
+                            if "METRIC" in UIElement.tag:
+                                opts.metric = UIElement.tag.split("_")[1] == "True"
+                            
+                            if "SAVE" in UIElement.tag:
+                                Menu.SaveOptions(path_mod,opts)
+   
+        if event.type == pygame.MOUSEBUTTONUP or event.type == pygame.FINGERUP:
+            mouse_down[0] = False
+
 def task1():
     DataProcessing()
 
@@ -186,4 +199,8 @@ t1.start()
 
 DataDrawing()
 
+Menu.SaveOptions(path_mod,opts)
 pygame.quit()
+
+
+
