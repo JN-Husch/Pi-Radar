@@ -53,6 +53,17 @@ class Button:
     def CheckMousePos(self):
         pygame.mouse.get_pos()
 
-class TextBox:
-    def __init__(self,txt = ""):
-        self.txt = txt
+class Text:
+    def __init__(self,txt = "", pos = [0,0], sze = [100,50],tag = "UKN"):
+        self.txt = txt        
+        self.pos = pos
+        self.sze = sze
+        self.tag = tag
+
+class Rectangle:
+    def __init__(self, col =[0,0,0], alpha = 255, pos = [0,0], sze = [100,50],tag = "UKN"):
+        self.col = col
+        self.alpha = alpha
+        self.pos = pos
+        self.sze = sze
+        self.tag = tag

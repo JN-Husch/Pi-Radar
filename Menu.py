@@ -2,65 +2,65 @@ import pygame
 import Classes
 import os
 
+opts = Classes.Options()
 
-fonts = []
-
-level = 0
-
-def Main(screen,fonts_in,level,opts):
-    global fonts
-    fonts = fonts_in
+def Main(screen,level,opts_in):
+    global opts
+    opts = opts_in
 
     if level == 0:
         return Level0(screen)
     elif level == 1:
-        return Level1(screen,opts)
+        return Level1(screen)
 
 def Level0(screen):
+    global opts
 
-    but_rng_dec = Classes.Button("RANGE DECR",[screen.get_width() / 2 - 200,200],[190, 80],"RNG_DN")
-    but_rng_inc = Classes.Button("RANGE INCR",[screen.get_width() / 2 + 10,200],[190, 80],"RNG_UP")
-    but_dn = Classes.Button("<<< MODE",[screen.get_width() / 2 - 200,300],[190, 80],"MODE_DN")
-    but_up = Classes.Button("MODE >>>",[screen.get_width() / 2 + 10,300],[190, 80],"MODE_UP")
-    but_opt = Classes.Button("OPTIONS",[screen.get_width() / 2 - 200,700],[400, 80], "OPTIONS")
-    but_retu = Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN")
-    but_exit = Classes.Button("EXIT",[screen.get_width() / 2 - 200,900],[400, 80],"EXIT")
+    range_unit = "NM"
+    if opts.metric:
+        range_unit = "KM"
 
     UIElements = []
-    UIElements.append(but_up)
-    UIElements.append(but_dn)
-    UIElements.append(but_retu)
-    UIElements.append(but_opt)
-    UIElements.append(but_rng_inc)
-    UIElements.append(but_rng_dec)
-    UIElements.append(but_exit)
+    UIElements.append(Classes.Rectangle([0,0,0],100,[0,0],[screen.get_width(), screen.get_height()]))
+    UIElements.append(Classes.Text("MAIN MENU",[screen.get_width() / 2 - 210,115],[420, 80]))
+
+    UIElements.append(Classes.Text("RANGE:",[screen.get_width() / 2 - 200,215],[100, 80]))
+    UIElements.append(Classes.Text(str(opts.dis_range * 5) + range_unit,[screen.get_width() / 2 - 100,215],[300, 80]))
+
+    UIElements.append(Classes.Button("RANGE DECR",[screen.get_width() / 2 - 200,300],[190, 80],"RNG_DN"))
+    UIElements.append(Classes.Button("RANGE INCR",[screen.get_width() / 2 + 10,300],[190, 80],"RNG_UP"))
+    UIElements.append(Classes.Text("MODE:",[screen.get_width() / 2 - 200,415],[100, 80]))
+    UIElements.append(Classes.Text(getModeName(opts.mode),[screen.get_width() / 2 - 100,415],[300, 80]))
+    if opts.mode > 0:
+        UIElements.append(Classes.Button("<<< MODE",[screen.get_width() / 2 - 200,500],[190, 80],"MODE_DN"))
+    if opts.mode < 3:
+        UIElements.append(Classes.Button("MODE >>>",[screen.get_width() / 2 + 10,500],[190, 80],"MODE_UP"))
+    UIElements.append(Classes.Button("OPTIONS",[screen.get_width() / 2 - 200,700],[400, 80], "OPTIONS"))
+    UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
+    UIElements.append(Classes.Button("EXIT",[screen.get_width() / 2 - 200,900],[400, 80],"EXIT"))
 
     return UIElements
 
 
-def Level1(screen,opts):
-    but_metric_off = Classes.Button("NAUTICAL",[screen.get_width() / 2 - 200,200],[190, 80],"METRIC_False", not opts.metric)
-    but_metric_on = Classes.Button("METRIC",[screen.get_width() / 2 + 10,200],[190, 80],"METRIC_True", opts.metric)
-    
-    but_grid_off = Classes.Button("GRID OFF",[screen.get_width() / 2 - 200,300],[190, 80],"GRID_False",not opts.grid)
-    but_grid_on = Classes.Button("GRID ON",[screen.get_width() / 2 + 10,300],[190, 80],"GRID_True", opts.grid)
-
-    but_debug_off = Classes.Button("DEBUG OFF",[screen.get_width() / 2 - 200,400],[190, 80],"DEBUG_False",not opts.debug)
-    but_debug_on = Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,400],[190, 80],"DEBUG_True", opts.debug)
-
-    but_save = Classes.Button("SAVE",[screen.get_width() / 2 - 200,700],[400, 80],"SAVE")
-
-    but_retu = Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN")
+def Level1(screen):
+    global opts
 
     UIElements = []
-    UIElements.append(but_metric_off)
-    UIElements.append(but_metric_on)    
-    UIElements.append(but_grid_off)
-    UIElements.append(but_grid_on)
-    UIElements.append(but_debug_off)
-    UIElements.append(but_debug_on)  
-    #UIElements.append(but_save)
-    UIElements.append(but_retu)
+    UIElements.append(Classes.Rectangle([0,0,0],100,[0,0],[screen.get_width(), screen.get_height()]))
+    UIElements.append(Classes.Text("OPTIONS",[screen.get_width() / 2 - 210,115],[420, 80]))
+    
+    UIElements.append(Classes.Button("NAUTICAL",[screen.get_width() / 2 - 200,200],[190, 80],"METRIC_False", not opts.metric))
+    UIElements.append(Classes.Button("METRIC",[screen.get_width() / 2 + 10,200],[190, 80],"METRIC_True", opts.metric))
+
+    UIElements.append(Classes.Button("GRID OFF",[screen.get_width() / 2 - 200,300],[190, 80],"GRID_False",not opts.grid))
+    UIElements.append(Classes.Button("GRID ON",[screen.get_width() / 2 + 10,300],[190, 80],"GRID_True", opts.grid))
+
+    UIElements.append(Classes.Button("DEBUG OFF",[screen.get_width() / 2 - 200,400],[190, 80],"DEBUG_False",not opts.debug))
+    UIElements.append(Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,400],[190, 80],"DEBUG_True", opts.debug))
+
+    #UIElements.append(Classes.Button("SAVE",[screen.get_width() / 2 - 200,700],[400, 80],"SAVE"))
+    UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
+
     return UIElements
 
 
@@ -154,4 +154,18 @@ def SaveOptions(path_mod,opts):
         except Exception as err:
             print("Error writing radar.cfg!")
             print(f"Unexpected {err=}, {type(err)=}")
-    pass
+
+
+def getModeName(mode):
+    name = "EMPTY"
+
+    if mode == 0:
+        name = "BASIC ANALOG"
+    elif mode == 1:
+        name = "ADVANCED ANALOG"
+    elif mode == 2:
+        name = "ANALOG DOTS"
+    elif mode == 3:
+        name = "DIGITAL"
+    
+    return name

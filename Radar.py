@@ -26,7 +26,8 @@ if os.name != 'nt':
 
 font1 = pygame.font.Font(path_mod + "res/Arial.ttf", 20)
 font2 = pygame.font.Font(path_mod + "res/Arial.ttf", 12)
-fonts = [font1,font2]
+font3 = pygame.font.Font(path_mod + "res/Arial.ttf", 25)
+fonts = [font1,font2,font3]
 
 mouse_down = [False,False]
 
@@ -93,7 +94,7 @@ def DataDrawing():
             Drawer.DrawConfigError(screen,fonts)            
         
         if menu_modes[0]:
-            UIElements = Menu.Main(screen,fonts,menu_level,opts)
+            UIElements = Menu.Main(screen,menu_level,opts)
             for UIElement in UIElements:
                 Drawer.DrawUI(screen,fonts,UIElement)
 
@@ -137,20 +138,20 @@ def DataDrawing():
         if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.FINGERDOWN) and not mouse_down[0]:              
             mouse_down[0] = True            
 
+            if not menu_modes[0]:
+                menu_modes[0] = True
+                menu_level = 0
 
             mousePos = pygame.mouse.get_pos()
-
-            UIHit = False
 
             for UIElement in UIElements:
                 if isinstance(UIElement, Classes.Button):
                     if UIElement.rect.collidepoint(mousePos):
-                        UIHit = True
                         if UIElement.tag =="RETURN":
                             if menu_level > 0:
                                 menu_level -= 1
                             else:
-                                UIHit = False # Fake UI not Hit to perform exit from menu                        
+                                menu_modes[0] = False                        
                         if menu_level == 0:
                             if UIElement.tag == "EXIT":
                                 run = False
@@ -185,15 +186,8 @@ def DataDrawing():
                                 opts.metric = UIElement.tag.split("_")[1] == "True"
                             
                             if "SAVE" in UIElement.tag:
-                                Menu.SaveOptions(path_mod,opts)
+                                Menu.SaveOptions(path_mod,opts)            
 
-            if not UIHit and menu_modes[0]:
-                menu_modes[0] = False
-                menu_level = 0
-            
-            elif not menu_modes[0]:
-                menu_modes[0] = True
-                menu_level = 0
         
         if event.type == pygame.MOUSEBUTTONUP or event.type == pygame.FINGERUP:
             mouse_down[0] = False

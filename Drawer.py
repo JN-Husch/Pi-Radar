@@ -283,6 +283,10 @@ def DrawConfigError(screen,fonts):
 def DrawUI(screen,fonts,UIElement):
     if isinstance(UIElement, Classes.Button):
         DrawButton(screen,fonts,UIElement)
+    elif isinstance(UIElement, Classes.Text):
+        DrawTextDisplay(screen,fonts,UIElement)
+    elif isinstance(UIElement, Classes.Rectangle):
+        DrawRectangle(screen,UIElement)
 
 def DrawButton(screen,fonts,button):
     #Draw Outer Rectangle
@@ -309,4 +313,13 @@ def DrawButton(screen,fonts,button):
     img = fonts[0].render(button.txt, True, [0, 0, 0])
     screen.blit(img, (button.pos[0] + button.sze[0] / 2 - img.get_width() / 2,button.pos[1] + button.sze[1] / 2 - img.get_height() / 2))
 
+def DrawTextDisplay(screen,fonts,display):
+    img = fonts[2].render(display.txt, True, [255, 255, 255])
+    screen.blit(img, (display.pos[0] + display.sze[0] / 2 - img.get_width() / 2,display.pos[1] + display.sze[1] / 2 - img.get_height() / 2))
 
+def DrawRectangle(screen,rectanle):
+    #Draw Inner Rectangle
+    s = pygame.Surface((rectanle.sze))
+    s.fill(rectanle.col)
+    s.set_alpha(rectanle.alpha)
+    screen.blit(s,rectanle.pos)
