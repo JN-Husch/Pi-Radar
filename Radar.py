@@ -138,57 +138,57 @@ def DataDrawing():
         if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.FINGERDOWN) and not mouse_down[0]:              
             mouse_down[0] = True            
 
-            if not menu_modes[0]:
-                menu_modes[0] = True
-                menu_level = 0
 
             mousePos = pygame.mouse.get_pos()
 
-            for UIElement in UIElements:
-                if isinstance(UIElement, Classes.Button):
-                    if UIElement.rect.collidepoint(mousePos):
-                        if UIElement.tag =="RETURN":
-                            if menu_level > 0:
-                                menu_level -= 1
-                            else:
-                                menu_modes[0] = False                        
-                        if menu_level == 0:
-                            if UIElement.tag == "EXIT":
-                                run = False
-                            if UIElement.tag == "MODE_UP":
-                                if opts.mode < 3:
-                                    opts.mode += 1
-                                    rdr_tgts.clear()
-                            if UIElement.tag == "MODE_DN":
-                                if opts.mode > 0:
-                                    opts.mode -= 1
-                                    rdr_tgts.clear()
-                            if UIElement.tag == "RNG_UP":
-                                if opts.dis_range <= 20:
-                                    opts.dis_range = opts.dis_range * 2
-                                    if opts.mode == 3:
+            if not menu_modes[0]:
+                menu_modes[0] = True
+                menu_level = 0
+            else:
+                for UIElement in UIElements:
+                    if isinstance(UIElement, Classes.Button):
+                        if UIElement.rect.collidepoint(mousePos):
+                            if UIElement.tag =="RETURN":
+                                if menu_level > 0:
+                                    menu_level -= 1
+                                else:
+                                    menu_modes[0] = False                        
+                            if menu_level == 0:
+                                if UIElement.tag == "EXIT":
+                                    run = False
+                                if UIElement.tag == "MODE_UP":
+                                    if opts.mode < 3:
+                                        opts.mode += 1
                                         rdr_tgts.clear()
-                            if UIElement.tag == "RNG_DN":
-                                if opts.dis_range >= 10:
-                                    opts.dis_range = int(round(opts.dis_range / 2,0))
-                                    if opts.mode == 3:
+                                if UIElement.tag == "MODE_DN":
+                                    if opts.mode > 0:
+                                        opts.mode -= 1
                                         rdr_tgts.clear()
-                            if UIElement.tag == "OPTIONS":
-                                menu_level = 1
-                        elif menu_level == 1:
-                            if "DEBUG" in UIElement.tag:
-                               opts.debug = UIElement.tag.split("_")[1] == "True"
-                            
-                            if "GRID" in UIElement.tag:
-                                opts.grid = UIElement.tag.split("_")[1] == "True"
+                                if UIElement.tag == "RNG_UP":
+                                    if opts.dis_range <= 20:
+                                        opts.dis_range = opts.dis_range * 2
+                                        if opts.mode == 3:
+                                            rdr_tgts.clear()
+                                if UIElement.tag == "RNG_DN":
+                                    if opts.dis_range >= 10:
+                                        opts.dis_range = int(round(opts.dis_range / 2,0))
+                                        if opts.mode == 3:
+                                            rdr_tgts.clear()
+                                if UIElement.tag == "OPTIONS":
+                                    menu_level = 1
+                            elif menu_level == 1:
+                                if "DEBUG" in UIElement.tag:
+                                   opts.debug = UIElement.tag.split("_")[1] == "True"
 
-                            if "METRIC" in UIElement.tag:
-                                opts.metric = UIElement.tag.split("_")[1] == "True"
-                            
-                            if "SAVE" in UIElement.tag:
-                                Menu.SaveOptions(path_mod,opts)            
+                                if "GRID" in UIElement.tag:
+                                    opts.grid = UIElement.tag.split("_")[1] == "True"
 
-        
+                                if "METRIC" in UIElement.tag:
+                                    opts.metric = UIElement.tag.split("_")[1] == "True"
+
+                                if "SAVE" in UIElement.tag:
+                                    Menu.SaveOptions(path_mod,opts)            
+
         if event.type == pygame.MOUSEBUTTONUP or event.type == pygame.FINGERUP:
             mouse_down[0] = False
 
