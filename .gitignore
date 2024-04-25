@@ -5,3 +5,5 @@ __pycache__/Drawing.cpython-311.pyc
 __pycache__/VectorCalc.cpython-311.pyc
 output/
 releases/
+.vscore/
+__pycache__/
