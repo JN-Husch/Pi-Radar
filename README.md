@@ -29,13 +29,17 @@ To install, follow these steps:
 
 1. Install Rasperry Pi OS (64-bit) Desktop onto your Pi's SD card.
 
-2. Create a folder called "Radar" on the Desktop of your Pi.
+2. Create a folder called "Pi-Radar" on the Desktop of your Pi.
 
 3. Download the latest Pi-Radar release for Raspberry and Linux from here: https://github.com/JN-Husch/Pi-Radar/releases/
 
 4. Unzip the contents from the Pi-Radar download into the folder on your Desktop.
 
-5. Adjust the `radar.cfg` file:
+5. Move to `$HOME/.config/` and create a folder called `pi-radar`
+
+7. Move the `radar.cfg` file to: `$HOME/.config/pi-radar/`
+
+8. Adjust the `radar.cfg` file:
 
    - FEEDER_URL= must contain the path to your receiver's aircraft.json file
 
@@ -43,9 +47,9 @@ To install, follow these steps:
 
 Optional:
 
-5. Copy the radar.desktop file to `home/pi/.config/autostart/`
+9. Copy the radar.desktop file to `$HOME/.config/autostart/`
 
-6. Reboot the Pi - On startup Pi Radar should show up automatically.
+10. Reboot the Pi - On startup Pi Radar should show up automatically.
 
 
 </br>
