@@ -3,6 +3,5 @@ __pycache__/DataFetcher.cpython-311.pyc
 __pycache__/Drawer.cpython-311.pyc
 __pycache__/Drawing.cpython-311.pyc
 __pycache__/VectorCalc.cpython-311.pyc
-output/radar.cfg
-output/Radar.exe
-output/res/Arial.ttf
+output/
+releases/
