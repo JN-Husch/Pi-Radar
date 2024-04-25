@@ -2,6 +2,7 @@
 
 Pi Radar is a Python project to display basic ADS-B information from a local receiver on a Raspberry Pi.
 
+</br>
 
 ## Hardware Suggestions
 
@@ -14,16 +15,44 @@ The harware below is used for the development of the Pi Radar. Other Hardware mi
 
 The case for the Pi Radar has been 3D printed. Files, required hardware and information about the 3D printed case can be found on [Printables](https://www.printables.com/model/847901-wall-mounted-case-for-round-waveshare-5in-display) or [MakerWorld](https://makerworld.com/en/models/433318#profileId-338029).
 
+</br>
 
 ## Software Installation
+
+### Raspberry Pi OS:
 
 To install, follow these steps:
 
 1. Install Rasperry Pi OS (64-bit) Desktop onto your Pi's SD card.
 
+2. Create a folder called "Radar" on the Desktop of your Pi.
 
-2. Copy the content of this GitHub onto your Pi's Desktop in a folder called "Radar" (without the "").
+3. Download the latest Pi-Radar release for Raspberry and Linux from here: https://github.com/JN-Husch/Pi-Radar/releases/
 
+4. Unzip the contents from the Pi-Radar download into the folder on your Desktop.
+
+5. Adjust the `radar.cfg` file:
+
+   - FEEDER_URL= must contain the path to your receiver's aircraft.json file
+
+   - LAT= and LNG= should be set to your desired radar location
+
+Optional:
+
+5. Copy the radar.desktop file to `home/pi/.config/autostart/`
+
+6. Reboot the Pi - On startup Pi Radar should show up automatically.
+
+
+</br>
+
+### Windows
+
+To run, follow these steps:
+
+1. Download the latest Pi-Radar release for Windows from here: https://github.com/JN-Husch/Pi-Radar/releases/
+
+2. Unzip the folder to any location.
 
 3. Adjust the radar.cfg file:
 
@@ -31,7 +60,6 @@ To install, follow these steps:
 
    - LAT= and LNG= should be set to your desired radar location
 
+4. Run Pi-Radar by clicking on the Pi-Radar.exe
 
-4. Copy the radar.desktop file to `home/pi/.config/autostart/`
-
-5. Reboot the Pi - On startup Pi Radar should show up automatically.
+Note: The `res` folder and the `radar.cfg` file must be in the same location as the Pi-Radar.exe
