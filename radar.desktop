@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=Radar
-Exec=/usr/bin/python3 /home/pi/Desktop/Radar/Radar.py
+Exec= sh -c "/usr/bin/python3 $HOME/Desktop/Pi-Radar/Radar.py"
 Terminal=false

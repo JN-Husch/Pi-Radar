@@ -251,19 +251,19 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
     # Draw 90° - Text Markings
     img = fonts[1].render("360", True, col_mark)
     img = pygame.transform.rotate(img,0)
-    screen.blit(img, (screen.get_width() / 2 - 15, 40))
+    screen.blit(img, (screen.get_width() / 2 - img.get_width() / 2 + 2, 45))
 
     img = fonts[1].render("090", True, col_mark)
     img = pygame.transform.rotate(img,270)
-    screen.blit(img, (screen.get_width() - 62, screen.get_height() / 2 - 15))
+    screen.blit(img, (screen.get_width() - 67, screen.get_height() / 2 - img.get_height() / 2 + 2))
 
     img = fonts[1].render("180", True, col_mark)
     img = pygame.transform.rotate(img,180)
-    screen.blit(img, (screen.get_width() / 2 - 15, screen.get_height() - 62))
+    screen.blit(img, (screen.get_width() / 2 - img.get_width() / 2 + 2, screen.get_height() - 67))
 
     img = fonts[1].render("270", True, col_mark)
     img = pygame.transform.rotate(img,90)
-    screen.blit(img, (40, screen.get_height() / 2 - 15))
+    screen.blit(img, (45, screen.get_height() / 2 - img.get_height() / 2 + 2))
 
 
 def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats):
