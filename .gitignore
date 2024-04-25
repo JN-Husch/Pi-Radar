@@ -3,7 +3,8 @@ __pycache__/DataFetcher.cpython-311.pyc
 __pycache__/Drawer.cpython-311.pyc
 __pycache__/Drawing.cpython-311.pyc
 __pycache__/VectorCalc.cpython-311.pyc
+__pycache__/
 output/
 releases/
-.vscore/
-__pycache__/
+.vscode/
+
