@@ -2,3 +2,4 @@
 Type=Application
 Name=Radar
 Exec=/usr/bin/python3 /home/pi/Desktop/Radar/Radar.py
+Terminal=false

@@ -10,6 +10,8 @@ import Menu
 import threading
 import os
 
+version = "0.1.0"
+
 # pygame setup
 pygame.init()
 
@@ -24,8 +26,8 @@ if os.name != 'nt':
     pygame.mouse.set_visible(False)
 
 
-font1 = pygame.font.Font(path_mod + "res/Arial.ttf", 20)
-font2 = pygame.font.Font(path_mod + "res/Arial.ttf", 12)
+font1 = pygame.font.Font(path_mod + "res/Arial.ttf", 12)
+font2 = pygame.font.Font(path_mod + "res/Arial.ttf", 20)
 font3 = pygame.font.Font(path_mod + "res/Arial.ttf", 25)
 fonts = [font1,font2,font3]
 
@@ -42,7 +44,7 @@ b_key_minus_pressed = False
 
 
 opts = Classes.Options()
-
+opts.vers = version
 #homePos = Classes.HomePosition()
 
 rdr_tgts = []

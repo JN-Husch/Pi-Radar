@@ -187,7 +187,7 @@ def DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle):
                 line_x = rdr_tgt.pos_x + math.sin(rdr_tgt.trk * math.pi / 180) *  rdr_tgt.spd * 100 / dis_range / 60 / 3
                 line_y = rdr_tgt.pos_y - math.cos(rdr_tgt.trk * math.pi / 180) *  rdr_tgt.spd * 100 / dis_range / 60 / 3
                 pygame.draw.line(screen,col,[rdr_tgt.pos_x, rdr_tgt.pos_y],[line_x, line_y], True)
-                img = fonts[1].render(rdr_tgt.cls, True, [175,175,175])
+                img = fonts[0].render(rdr_tgt.cls, True, [175,175,175])
                 label_offset_y = -20
                 if rdr_tgt.trk >= 270 or rdr_tgt.trk <= 90:
                     label_offset_y = 10
@@ -215,7 +215,7 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
         if opt.metric:
             range_unit ="KM"
 
-        img = fonts[0].render(str(i * dis_range) + range_unit, True, col_mark)
+        img = fonts[1].render(str(i * dis_range) + range_unit, True, col_mark)
         screen.blit(img, (screen.get_width() / 2 - 20, screen.get_height() / 2 + 100 * i + 10))
     
     #Draw Indexes
@@ -249,35 +249,35 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
         pygame.draw.line(screen,color=col_mark,start_pos=[line_pos1_x, line_pos1_y],end_pos=[line_pos2_x, line_pos2_y], width=2)
 
     # Draw 90° - Text Markings
-    img = fonts[0].render("360", True, col_mark)
+    img = fonts[1].render("360", True, col_mark)
     img = pygame.transform.rotate(img,0)
     screen.blit(img, (screen.get_width() / 2 - 15, 40))
 
-    img = fonts[0].render("090", True, col_mark)
+    img = fonts[1].render("090", True, col_mark)
     img = pygame.transform.rotate(img,270)
     screen.blit(img, (screen.get_width() - 62, screen.get_height() / 2 - 15))
 
-    img = fonts[0].render("180", True, col_mark)
+    img = fonts[1].render("180", True, col_mark)
     img = pygame.transform.rotate(img,180)
     screen.blit(img, (screen.get_width() / 2 - 15, screen.get_height() - 62))
 
-    img = fonts[0].render("270", True, col_mark)
+    img = fonts[1].render("270", True, col_mark)
     img = pygame.transform.rotate(img,90)
     screen.blit(img, (40, screen.get_height() / 2 - 15))
 
 
 def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats):
-    img = fonts[0].render("Mode:  " + str(mode), True, [250,250,250])
+    img = fonts[1].render("Mode:  " + str(mode), True, [250,250,250])
     screen.blit(img, (200,200))
-    img = fonts[0].render("Rate:   " + str(fps) + "fps", True, [250,250,250])
+    img = fonts[1].render("Rate:   " + str(fps) + "fps", True, [250,250,250])
     screen.blit(img, (200,225))
-    img = fonts[0].render("D/E/%:  " + str(dwnl_stats[0]) + " / " + str(dwnl_stats[1]) + " / " + str(round(dwnl_stats[1] / dwnl_stats[0] * 100,1)) + "%", True, [250,250,250])
+    img = fonts[1].render("D/E/%:  " + str(dwnl_stats[0]) + " / " + str(dwnl_stats[1]) + " / " + str(round(dwnl_stats[1] / dwnl_stats[0] * 100,1)) + "%", True, [250,250,250])
     screen.blit(img, (200,250))
 
 def DrawConfigError(screen,fonts):
-    img = fonts[0].render("ERROR IN radar.cfg File", True, [255, 0, 0])
+    img = fonts[1].render("ERROR IN radar.cfg File", True, [255, 0, 0])
     screen.blit(img, (screen.get_width() / 2 - 100, screen.get_height() / 2))
-    img = fonts[0].render("Please check configuration!", True, [255, 255, 255])
+    img = fonts[1].render("Please check configuration!", True, [255, 255, 255])
     screen.blit(img, (screen.get_width() / 2 - 115, screen.get_height() / 2 + 25))
 
 def DrawUI(screen,fonts,UIElement):
@@ -310,11 +310,11 @@ def DrawButton(screen,fonts,button):
             col = [175,175,175]
     pygame.draw.rect(screen,col,rect)
 
-    img = fonts[0].render(button.txt, True, [0, 0, 0])
+    img = fonts[1].render(button.txt, True, [0, 0, 0])
     screen.blit(img, (button.pos[0] + button.sze[0] / 2 - img.get_width() / 2,button.pos[1] + button.sze[1] / 2 - img.get_height() / 2))
 
 def DrawTextDisplay(screen,fonts,display):
-    img = fonts[2].render(display.txt, True, [255, 255, 255])
+    img = fonts[display.fnt_sze].render(display.txt, True, [255, 255, 255])
     screen.blit(img, (display.pos[0] + display.sze[0] / 2 - img.get_width() / 2,display.pos[1] + display.sze[1] / 2 - img.get_height() / 2))
 
 def DrawRectangle(screen,rectanle):

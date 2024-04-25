@@ -40,6 +40,7 @@ class Options:
     homePos = HomePosition()
     dis_range = 10
     url = ""
+    vers = ""
 
 class Button:
     def __init__(self,txt = "EMPTY!", pos = [0,0], sze = [100,50],tag = "UKN", highlight = False):
@@ -54,11 +55,12 @@ class Button:
         pygame.mouse.get_pos()
 
 class Text:
-    def __init__(self,txt = "", pos = [0,0], sze = [100,50],tag = "UKN"):
+    def __init__(self,txt = "", pos = [0,0], sze = [100,50],tag = "UKN",fnt_sze = 0):
         self.txt = txt        
         self.pos = pos
         self.sze = sze
         self.tag = tag
+        self.fnt_sze = fnt_sze
 
 class Rectangle:
     def __init__(self, col =[0,0,0], alpha = 255, pos = [0,0], sze = [100,50],tag = "UKN"):
