@@ -21,16 +21,16 @@ def Level0(screen):
         range_unit = "KM"
 
     UIElements = []
-    UIElements.append(Classes.Rectangle([0,0,0],100,[0,0],[screen.get_width(), screen.get_height()]))
-    UIElements.append(Classes.Text("MAIN MENU",[screen.get_width() / 2 - 210,115],[420, 80]))
+    UIElements.append(Classes.Rectangle([0,0,0],150,[0,0],[screen.get_width(), screen.get_height()]))
+    UIElements.append(Classes.Text("MAIN MENU",[screen.get_width() / 2 - 210,115],[420, 80],fnt_sze=2))
 
-    UIElements.append(Classes.Text("RANGE:",[screen.get_width() / 2 - 200,215],[100, 80]))
-    UIElements.append(Classes.Text(str(opts.dis_range * 5) + range_unit,[screen.get_width() / 2 - 100,215],[300, 80]))
+    UIElements.append(Classes.Text("RANGE:",[screen.get_width() / 2 - 200,215],[100, 80],fnt_sze=2))
+    UIElements.append(Classes.Text(str(opts.dis_range * 5) + range_unit,[screen.get_width() / 2 - 100,215],[300, 80],fnt_sze=2))
 
     UIElements.append(Classes.Button("RANGE DECR",[screen.get_width() / 2 - 200,300],[190, 80],"RNG_DN"))
     UIElements.append(Classes.Button("RANGE INCR",[screen.get_width() / 2 + 10,300],[190, 80],"RNG_UP"))
-    UIElements.append(Classes.Text("MODE:",[screen.get_width() / 2 - 200,415],[100, 80]))
-    UIElements.append(Classes.Text(getModeName(opts.mode),[screen.get_width() / 2 - 100,415],[300, 80]))
+    UIElements.append(Classes.Text("MODE:",[screen.get_width() / 2 - 200,415],[100, 80],fnt_sze=2))
+    UIElements.append(Classes.Text(getModeName(opts.mode),[screen.get_width() / 2 - 100,415],[300, 80],fnt_sze=2))
     if opts.mode > 0:
         UIElements.append(Classes.Button("<<< MODE",[screen.get_width() / 2 - 200,500],[190, 80],"MODE_DN"))
     if opts.mode < 3:
@@ -38,6 +38,7 @@ def Level0(screen):
     UIElements.append(Classes.Button("OPTIONS",[screen.get_width() / 2 - 200,700],[400, 80], "OPTIONS"))
     UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
     UIElements.append(Classes.Button("EXIT",[screen.get_width() / 2 - 200,900],[400, 80],"EXIT"))
+    UIElements.append(Classes.Text("Version: " + opts.vers,[screen.get_width() / 2 - 200,975],[400, 80],fnt_sze=1))
 
     return UIElements
 
@@ -46,8 +47,8 @@ def Level1(screen):
     global opts
 
     UIElements = []
-    UIElements.append(Classes.Rectangle([0,0,0],100,[0,0],[screen.get_width(), screen.get_height()]))
-    UIElements.append(Classes.Text("OPTIONS",[screen.get_width() / 2 - 210,115],[420, 80]))
+    UIElements.append(Classes.Rectangle([0,0,0],150,[0,0],[screen.get_width(), screen.get_height()]))
+    UIElements.append(Classes.Text("OPTIONS",[screen.get_width() / 2 - 210,115],[420, 80],fnt_sze=2))
     
     UIElements.append(Classes.Button("NAUTICAL",[screen.get_width() / 2 - 200,200],[190, 80],"METRIC_False", not opts.metric))
     UIElements.append(Classes.Button("METRIC",[screen.get_width() / 2 + 10,200],[190, 80],"METRIC_True", opts.metric))
