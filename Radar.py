@@ -10,7 +10,7 @@ import Menu
 import threading
 import os
 
-version = "0.1.0"
+version = "0.1.1"
 
 # pygame setup
 pygame.init()
@@ -21,14 +21,17 @@ dt = 0
 
 path_mod = ""
 
-if os.name != 'nt':
-    path_mod = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop') + "/Radar/"
+if os.name == 'nt':
+    font1 = pygame.font.SysFont('ocrastdopentype', 12)
+    font2 = pygame.font.SysFont('ocrastdopentype', 20)
+    font3 = pygame.font.SysFont('ocrastdopentype', 25)
+elif os.name == 'posix' or os.name != 'nt':
+    path_mod = os.path.join(os.path.join(os.path.expanduser('~')), '.config') + "/pi-radar/"
     pygame.mouse.set_visible(False)
+    font1 = pygame.font.SysFont('quicksand', 12)
+    font2 = pygame.font.SysFont('quicksand', 20)
+    font3 = pygame.font.SysFont('quicksand', 25)
 
-
-font1 = pygame.font.Font(path_mod + "res/Arial.ttf", 12)
-font2 = pygame.font.Font(path_mod + "res/Arial.ttf", 20)
-font3 = pygame.font.Font(path_mod + "res/Arial.ttf", 25)
 fonts = [font1,font2,font3]
 
 mouse_down = [False,False]
