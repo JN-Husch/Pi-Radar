@@ -4,21 +4,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-    #tgtHist
-    # 0. Time
-    # 1. HEX
-    # 2. LAT
-    # 3. LON
-    # 4. FLT
-    # 5. DIS3D
-    # 6. ALT
-    # 7. AZI
-    # 8. ELE
-    # 9. Time Diff
-    # 10. SPD
-    # 11. TRK
-
-
+#Get ADSB Data from url
 def fetchADSBData(homePos,url):
     tgts = []
 
@@ -26,7 +12,12 @@ def fetchADSBData(homePos,url):
         r = requests.get(url, timeout=4)
         aircraft_data = r.json()
 
-        for a in aircraft_data["aircraft"]:
+        #Check if data is from local receiver or airplanes.live API by checking if it contains "ac" or "aircraft"
+        var_name = "ac"
+        if "aircraft" in str(aircraft_data).split(":[")[0]:
+            var_name = "aircraft"
+
+        for a in aircraft_data[var_name]:
             timestmp = aircraft_data.get("now")
 
             tgt = Classes.Aircraft()

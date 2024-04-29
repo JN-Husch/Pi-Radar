@@ -60,6 +60,9 @@ def Level1(screen):
     UIElements.append(Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,400],[190, 80],"DEBUG_True", opts.debug))
 
     #UIElements.append(Classes.Button("SAVE",[screen.get_width() / 2 - 200,700],[400, 80],"SAVE"))
+    
+    UIElements.append(Classes.Text("Data Source:",[screen.get_width() / 2 - 200,650],[400, 80],fnt_sze=1))
+    UIElements.append(Classes.Text(opts.source,[screen.get_width() / 2 - 200,700],[400, 80],fnt_sze=1))
     UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
 
     return UIElements
@@ -116,8 +119,9 @@ def SaveOptions(path_mod,opts):
 
                 if len(lines) > 0:
                     for i in range(0,len(lines)):
-                        if "FEEDER_URL=" in lines[i]:
-                            lines[i] = "FEEDER_URL=" + opts.url + "\n"
+                        if "api.airplanes.live" not in opts.url:
+                            if "FEEDER_URL=" in lines[i]:
+                                lines[i] = "FEEDER_URL=" + opts.url + "\n"
 
                         if "RADAR_MODE=" in lines[i]:
                             lines[i] = "RADAR_MODE=" + str(opts.mode) + "\n"
