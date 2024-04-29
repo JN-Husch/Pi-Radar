@@ -28,7 +28,7 @@ if os.name == 'nt':
 elif os.name == 'posix' or os.name != 'nt':
     path_mod = os.path.join(os.path.join(os.path.expanduser('~')), '.config') + "/pi-radar/"
     pygame.mouse.set_visible(False)
-    font1 = pygame.font.SysFont('quicksand', 12)
+    font1 = pygame.font.SysFont('quicksand', 15)
     font2 = pygame.font.SysFont('quicksand', 20)
     font3 = pygame.font.SysFont('quicksand', 25)
 
