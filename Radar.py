@@ -22,7 +22,7 @@ dt = 0
 path_mod = ""
 
 if os.name == 'nt':
-    font1 = pygame.font.SysFont('ocrastdopentype', 12)
+    font1 = pygame.font.SysFont('ocrastdopentype', 15)
     font2 = pygame.font.SysFont('ocrastdopentype', 20)
     font3 = pygame.font.SysFont('ocrastdopentype', 25)
 elif os.name == 'posix' or os.name != 'nt':
