@@ -1,6 +1,6 @@
 # Pi Radar
 
-Pi Radar is a Python project to display basic ADS-B information from a local receiver on a Raspberry Pi.
+Pi Radar is a Python project to display basic ADS-B information from the https://airplanes.live API or a local receiver on a Raspberry Pi similar to an analog radar scope.
 
 There are several different styles of radar scopes available:
 
