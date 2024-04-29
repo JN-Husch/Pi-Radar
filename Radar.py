@@ -10,7 +10,7 @@ import Menu
 import threading
 import os
 
-version = "0.1.1"
+version = "0.2.0"
 
 # pygame setup
 pygame.init()
@@ -40,7 +40,6 @@ t0 = time.time()
 
 #mode = 1 #1 - Analog Radar, 2 - Digital Radar
 sweep_angle = 270
-#dis_range = 10
 
 b_key_plus_pressed = False
 b_key_minus_pressed = False
@@ -48,7 +47,6 @@ b_key_minus_pressed = False
 
 opts = Classes.Options()
 opts.vers = version
-#homePos = Classes.HomePosition()
 
 rdr_tgts = []
 raw_tgts = []
@@ -64,6 +62,13 @@ run = True
 UIElements = []
 
 opts = Menu.LoadOptions(path_mod,opts)
+
+#Use airplanes.live API if no url has been defined
+if len(opts.url) < 2:
+    opts.url = "https://api.airplanes.live/v2/point/" + str(opts.homePos.lat) + "/" + str(opts.homePos.lng) + "/250"
+    opts.source = "airplanes.live API"
+else:
+    opts.source = "Local URL: " + opts.url
 
 def Stop():
     global run

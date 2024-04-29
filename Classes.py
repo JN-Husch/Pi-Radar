@@ -41,6 +41,7 @@ class Options:
     dis_range = 10
     url = ""
     vers = ""
+    source = ""
 
 class Button:
     def __init__(self,txt = "EMPTY!", pos = [0,0], sze = [100,50],tag = "UKN", highlight = False):
