@@ -132,9 +132,9 @@ def DataDrawing():
         else:
             b_key_minus_pressed = False
         
-        sweep_angle += 0.9
+        sweep_angle += 1.2
         if raw_tgts_new is None:
-            if sweep_angle > 180 and sweep_angle < 180 + 40 * dt:
+            if sweep_angle > 180 and sweep_angle < 180 + 30 * dt:
                 t3 = threading.Thread(target=task1)
                 t3.start()
         
@@ -146,7 +146,7 @@ def DataDrawing():
             t2.start()
 
         pygame.display.flip()
-        dt = clock.tick(40) / 1000
+        dt = clock.tick(30) / 1000
         fps = round(clock.get_fps(),0)
 
         

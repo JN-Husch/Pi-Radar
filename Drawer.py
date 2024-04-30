@@ -31,7 +31,7 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     if raw_tgts is not None:
         for tgt in raw_tgts:
             if tgt.dis < dis_range * 5:
-                if not tgt.drawn and sweep_angle > tgt.ang and sweep_angle <= tgt.ang + 0.9:
+                if not tgt.drawn and sweep_angle > tgt.ang and sweep_angle <= tgt.ang + 1.2:
                     rdr_tgt = Classes.RadarTarget()
                     rdr_tgt.pos_x = screen.get_width() / 2 + math.sin(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range * conv_fact
                     rdr_tgt.pos_y = screen.get_height() / 2 - math.cos(tgt.ang * math.pi / 180) * tgt.dis * 100 / dis_range * conv_fact
@@ -125,7 +125,7 @@ def AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle):
             end_pos_y = rdr_tgt.pos_y - math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
             pygame.draw.line(screen,color=col,start_pos=[sta_pos_x, sta_pos_y],end_pos=[end_pos_x, end_pos_y], width=rdr_tgt.sze)
 
-        rdr_tgt.fade = rdr_tgt.fade * 0.998
+        rdr_tgt.fade = rdr_tgt.fade * 0.9965
         if rdr_tgt.fade < 10:
             rdr_tgts.remove(rdr_tgt)  
 
@@ -152,7 +152,7 @@ def AnalogDraw3(screen,rdr_tgts,dis_range,sweep_angle):
             col = [round(20 * rdr_tgt.fade / 1000,0) + 37, round(190 * rdr_tgt.fade / 1000,0) + 37, round(20 * rdr_tgt.fade / 1000,0) + 37]
             pygame.draw.circle(screen,color=col,center=[rdr_tgt.pos_x, rdr_tgt.pos_y], radius=7)
         
-        rdr_tgt.fade = rdr_tgt.fade * 0.998
+        rdr_tgt.fade = rdr_tgt.fade * 0.9965
         if rdr_tgt.fade < 10:
             rdr_tgts.remove(rdr_tgt)
 
@@ -194,7 +194,7 @@ def DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle):
                 screen.blit(img, (rdr_tgt.pos_x - 20, rdr_tgt.pos_y + label_offset_y))
 
         #Remove old targets ahead of sweep bar
-        if sweep_angle > rdr_tgt.ang - 1 and sweep_angle < rdr_tgt.ang:
+        if sweep_angle > rdr_tgt.ang - 1.5 and sweep_angle < rdr_tgt.ang:
             rdr_tgts.remove(rdr_tgt) 
 
     #Draw Scan Bar
