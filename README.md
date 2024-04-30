@@ -23,8 +23,10 @@ Screenshots:
 
 The harware below is used for the development of the Pi Radar. Other Hardware might also work...
 
-- Raspberry Pi 4 (Pi 5 is not recommended in combination with the round 5in WaveShare display due to the supplied connectors not correctly matching the Pi 5)
+- Raspberry Pi 4B (The Pi 5 is not recommended, as it is not yet compatible with the round 5in Displays supplied connectors)
 - Round 5in WaveShare Display (https://www.waveshare.com/5inch-1080x1080-lcd.htm)
+- (optional) Top mounted Raspberry Pi heatsink (please use one that does not use the Pi's mounting holes, as those are used by the display)
+
 
 ### 3D Printed Parts
 
