@@ -2,8 +2,6 @@
 
 Pi Radar is a Python project to display basic ADS-B information from the https://airplanes.live API or a local receiver on a Raspberry Pi similar to an analog radar scope.
 
-There are several different styles of radar scopes available:
-
 </br>
 
 Demo Video (YouTube):
@@ -12,7 +10,7 @@ Demo Video (YouTube):
 
 </br>
 
-Screenshots:
+There are several different styles of radar scopes available:
 
 ![Radar_Example](https://github.com/JN-Husch/Pi-Radar/assets/156305491/3c46a59e-bdc7-491c-96d8-f99feeb98f57)
 
