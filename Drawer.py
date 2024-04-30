@@ -266,13 +266,18 @@ def DrawMarkings(screen,fonts,col_mark,dis_range):
     screen.blit(img, (45, screen.get_height() / 2 - img.get_height() / 2 + 2))
 
 
-def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats):
+def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats,temp):
     img = fonts[1].render("Mode:  " + str(mode), True, [250,250,250])
     screen.blit(img, (200,200))
     img = fonts[1].render("Rate:   " + str(fps) + "fps", True, [250,250,250])
     screen.blit(img, (200,225))
     img = fonts[1].render("D/E/%:  " + str(dwnl_stats[0]) + " / " + str(dwnl_stats[1]) + " / " + str(round(dwnl_stats[1] / dwnl_stats[0] * 100,1)) + "%", True, [250,250,250])
     screen.blit(img, (200,250))
+
+    #Show temp only on Rasberry Pi:
+    if temp != -99:
+        img = fonts[1].render("CPU Temp: " + str(round(temp,1)) + "°C", True, [250,250,250])
+        screen.blit(img, (200,275))
 
 def DrawConfigError(screen,fonts):
     img = fonts[1].render("ERROR IN radar.cfg File", True, [255, 0, 0])

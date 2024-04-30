@@ -10,7 +10,7 @@ import Menu
 import threading
 import os
 
-version = "0.2.0"
+version = "0.2.1"
 
 # pygame setup
 pygame.init()
@@ -20,6 +20,8 @@ clock = pygame.time.Clock()
 dt = 0
 
 path_mod = ""
+
+cpu = None
 
 if os.name == 'nt':
     font1 = pygame.font.SysFont('ocrastdopentype', 15)
@@ -31,6 +33,8 @@ elif os.name == 'posix' or os.name != 'nt':
     font1 = pygame.font.SysFont('quicksand', 15)
     font2 = pygame.font.SysFont('quicksand', 20)
     font3 = pygame.font.SysFont('quicksand', 25)
+    from gpiozero import CPUTemperature
+    cpu = CPUTemperature()
 
 fonts = [font1,font2,font3]
 
@@ -54,6 +58,7 @@ raw_tgts_new = []
 
 fps = 0
 dwnl_stats = [1,0] #0 - Total Downloads, #1 - Errors
+cpu_temp = -99
 
 menu_modes = [False,0,0] #0 - Open, 
 menu_level = 0
@@ -88,7 +93,7 @@ def DataProcessing():
 def DataDrawing():
     global raw_tgts, raw_tgts_new
     global run, screen, sweep_angle, menu_modes
-    global fps, opts
+    global fps, opts, cpu_temp
     global UIElements
 
     while run:
@@ -99,7 +104,7 @@ def DataDrawing():
         if opts.config_ok:
             Drawer.Draw(opts.mode,screen,raw_tgts,rdr_tgts,opts.dis_range,sweep_angle,fonts,opts)
             if opts.debug:
-                Drawer.DrawDebugInfo(screen,fonts,opts.mode,fps,dwnl_stats)
+                Drawer.DrawDebugInfo(screen,fonts,opts.mode,fps,dwnl_stats,cpu_temp)
         else:
             Drawer.DrawConfigError(screen,fonts)            
         
@@ -207,6 +212,21 @@ def task1():
 
 t1 = threading.Thread(target=task1)
 t1.start()
+
+def task2():
+    while run:
+        global cpu
+        global cpu_temp
+    
+        if os.name == 'posix':
+            cpu_temp = cpu.temperature
+        
+        time.sleep(1)
+
+t2 = threading.Thread(target=task2)
+
+if os.name == 'posix':
+    t2.start()
 
 DataDrawing()
 
