@@ -2,10 +2,14 @@ import pygame
 from pygame import gfxdraw
 import Classes
 import math
+import Utilities
 
 opt = [False,False,False]
 
 fonts = []
+
+cntry_points_raw = None
+cntry_points = None
 
 def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     global opt
@@ -57,6 +61,8 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
                     rdr_tgts.append(rdr_tgt)
                     raw_tgts.remove(tgt)
 
+    DrawCountryBorders(screen)
+
     if mode == 0:
         AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 1:
@@ -65,7 +71,6 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
         AnalogDraw3(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 3:
         DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle)
-
 
 def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
@@ -328,3 +333,25 @@ def DrawRectangle(screen,rectanle):
     s.fill(rectanle.col)
     s.set_alpha(rectanle.alpha)
     screen.blit(s,rectanle.pos)
+
+def DrawCountryBorders(screen):
+    global cntry_points_raw, cntry_points
+    global opt
+
+    col_cntry = [65,65,65]
+    #Check if raw Country Points need to be loaded from file...
+    if cntry_points_raw is None:
+        cntry_points_raw = Utilities.loadCountryPoints()
+
+    #Check if Country Points were loaded by previous step, if not return
+    if cntry_points_raw is None:
+        return
+
+    #Check if Country Points need to be processed
+    if cntry_points is None or opt.force_update:
+        cntry_points = Utilities.calcCountryPoints(screen.get_size(),cntry_points_raw,opt.homePos,opt.dis_range,opt.metric)
+    
+    #Draw Countries
+    if cntry_points is not None:
+        for some_points in cntry_points:
+            pygame.draw.polygon(screen,col_cntry,some_points,2)

@@ -39,6 +39,7 @@ class Options:
     mode = 0
     homePos = HomePosition()
     dis_range = 10
+    force_update = False
     url = ""
     vers = ""
     source = ""

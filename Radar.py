@@ -117,6 +117,7 @@ def DataDrawing():
         if keys[pygame.K_PLUS] and opts.dis_range <= 20:
             if not b_key_plus_pressed:
                 opts.dis_range = opts.dis_range * 2
+                opts.force_update = True
                 b_key_plus_pressed = True
                 if opts.mode == 3:
                     rdr_tgts.clear()
@@ -126,6 +127,7 @@ def DataDrawing():
         if keys[pygame.K_MINUS] and opts.dis_range >= 10:
             if not b_key_minus_pressed:
                 opts.dis_range = int(round(opts.dis_range / 2,0))
+                opts.force_update = True
                 b_key_minus_pressed = True
                 if opts.mode == 3:
                     rdr_tgts.clear()
@@ -152,7 +154,6 @@ def DataDrawing():
         
         if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.FINGERDOWN) and not mouse_down[0]:              
             mouse_down[0] = True            
-
 
             mousePos = pygame.mouse.get_pos()
 
@@ -182,11 +183,13 @@ def DataDrawing():
                                 if UIElement.tag == "RNG_UP":
                                     if opts.dis_range <= 20:
                                         opts.dis_range = opts.dis_range * 2
+                                        opts.force_update = True
                                         if opts.mode == 3:
                                             rdr_tgts.clear()
                                 if UIElement.tag == "RNG_DN":
                                     if opts.dis_range >= 10:
                                         opts.dis_range = int(round(opts.dis_range / 2,0))
+                                        opts.force_update = True
                                         if opts.mode == 3:
                                             rdr_tgts.clear()
                                 if UIElement.tag == "OPTIONS":
@@ -200,6 +203,7 @@ def DataDrawing():
 
                                 if "METRIC" in UIElement.tag:
                                     opts.metric = UIElement.tag.split("_")[1] == "True"
+                                    opts.force_update = True
 
                                 if "SAVE" in UIElement.tag:
                                     Menu.SaveOptions(path_mod,opts)            
