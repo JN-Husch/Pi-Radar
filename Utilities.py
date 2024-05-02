@@ -8,7 +8,7 @@ import os
 def loadCountryPoints():
     all_points = []
 
-    path_mod = ""
+    path_mod = "."
     if os.name == 'posix' or os.name != 'nt':
         path_mod = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop') + "/Pi-Radar/"
     

@@ -12,8 +12,10 @@ fonts = []
 cntry_points_raw = None
 cntry_points = None
 
+surf_grid = None
+
 def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
-    global opt
+    global opt, surf_grid
     global fonts
 
     fonts = fonts_in
@@ -21,12 +23,20 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
     
     col_back = [37,37,37]
     screen.fill(col_back)
+    
+    DrawCountryBorders(screen)
+    
     #Draw Grid Lines
     grid_space = 100
     if opts.grid:
-        for i in range (-7,7):
-            pygame.draw.line(screen,color=[50,50,50],start_pos=[0,screen.get_height() / 2 + grid_space * i + 1],end_pos=[screen.get_width(),screen.get_height() / 2 + grid_space * i + 1],width=1)
-            pygame.draw.line(screen,color=[50,50,50],start_pos=[screen.get_width() / 2 + grid_space * i + 1,0],end_pos=[screen.get_width() / 2 + grid_space * i + 1,screen.get_height()],width=1)
+        if surf_grid is None:
+            surf_grid = pygame.Surface((screen.get_width(), screen.get_height()),pygame.SRCALPHA)
+
+            for i in range (-7,7):
+                pygame.draw.line(surf_grid,color=[50,50,50],start_pos=[0,screen.get_height() / 2 + grid_space * i + 1],end_pos=[screen.get_width(),screen.get_height() / 2 + grid_space * i + 1],width=1)
+                pygame.draw.line(surf_grid,color=[50,50,50],start_pos=[screen.get_width() / 2 + grid_space * i + 1,0],end_pos=[screen.get_width() / 2 + grid_space * i + 1,screen.get_height()],width=1)
+        
+        screen.blit(surf_grid,(0,0))
 
     conv_fact = 1
     
@@ -62,8 +72,6 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
                     rdr_tgts.append(rdr_tgt)
                     raw_tgts.remove(tgt)
 
-    DrawCountryBorders(screen)
-
     if mode == 0:
         AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 1:
@@ -72,6 +80,8 @@ def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
         AnalogDraw3(screen,rdr_tgts,dis_range,sweep_angle)
     elif mode == 3:
         DigitalDraw(screen,rdr_tgts,dis_range,sweep_angle)
+
+    opt.force_update = False
 
 def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
@@ -354,7 +364,6 @@ def DrawCountryBorders(screen):
     #Check if Country Points need to be processed
     if cntry_points is None or opt.force_update:
         cntry_points = Utilities.calcCountryPoints(screen.get_size(),cntry_points_raw,opt.homePos,opt.dis_range,opt.metric)
-        opt.force_update = False
     
     #Draw Countries
     if cntry_points is not None:

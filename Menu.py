@@ -100,6 +100,7 @@ def LoadOptions(path_mod,opts):
                         if "RANGE_IN_KM=" in line:
                             opts.metric = line.split("=")[1].lower().strip() == "true"
 
+                opts.force_update = False
                 opts.config_ok = True
 
         except Exception as err:

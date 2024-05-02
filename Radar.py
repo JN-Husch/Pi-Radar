@@ -200,6 +200,7 @@ def DataDrawing():
 
                                 if "GRID" in UIElement.tag:
                                     opts.grid = UIElement.tag.split("_")[1] == "True"
+                                    opts.force_update = True
 
                                 if "METRIC" in UIElement.tag:
                                     opts.metric = UIElement.tag.split("_")[1] == "True"
