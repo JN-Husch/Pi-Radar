@@ -354,6 +354,7 @@ def DrawCountryBorders(screen):
     #Check if Country Points need to be processed
     if cntry_points is None or opt.force_update:
         cntry_points = Utilities.calcCountryPoints(screen.get_size(),cntry_points_raw,opt.homePos,opt.dis_range,opt.metric)
+        opt.force_update = False
     
     #Draw Countries
     if cntry_points is not None:
