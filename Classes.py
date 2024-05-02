@@ -40,6 +40,7 @@ class Options:
     homePos = HomePosition()
     dis_range = 10
     force_update = False
+    show_countries = False
     url = ""
     vers = ""
     source = ""

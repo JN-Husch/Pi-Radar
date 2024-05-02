@@ -16,6 +16,7 @@ version = "0.3.0"
 pygame.init()
 
 screen = pygame.display.set_mode((1080, 1080),pygame.FULLSCREEN|SCALED)
+screen.set_alpha(None)
 clock = pygame.time.Clock()
 dt = 0
 
@@ -204,6 +205,10 @@ def DataDrawing():
 
                                 if "METRIC" in UIElement.tag:
                                     opts.metric = UIElement.tag.split("_")[1] == "True"
+                                    opts.force_update = True
+
+                                if "COUNTRIES" in UIElement.tag:
+                                    opts.show_countries = UIElement.tag.split("_")[1] == "True"
                                     opts.force_update = True
 
                                 if "SAVE" in UIElement.tag:

@@ -12,31 +12,25 @@ fonts = []
 cntry_points_raw = None
 cntry_points = None
 
-surf_grid = None
-
 def Draw(mode,screen,raw_tgts,rdr_tgts,dis_range,sweep_angle,fonts_in,opts):
-    global opt, surf_grid
+    global opt
     global fonts
-
+  
     fonts = fonts_in
     opt = opts
     
     col_back = [37,37,37]
     screen.fill(col_back)
     
-    DrawCountryBorders(screen)
+    if opts.show_countries:
+        DrawCountryBorders(screen)
     
     #Draw Grid Lines
     grid_space = 100
     if opts.grid:
-        if surf_grid is None:
-            surf_grid = pygame.Surface((screen.get_width(), screen.get_height()),pygame.SRCALPHA)
-
-            for i in range (-7,7):
-                pygame.draw.line(surf_grid,color=[50,50,50],start_pos=[0,screen.get_height() / 2 + grid_space * i + 1],end_pos=[screen.get_width(),screen.get_height() / 2 + grid_space * i + 1],width=1)
-                pygame.draw.line(surf_grid,color=[50,50,50],start_pos=[screen.get_width() / 2 + grid_space * i + 1,0],end_pos=[screen.get_width() / 2 + grid_space * i + 1,screen.get_height()],width=1)
-        
-        screen.blit(surf_grid,(0,0))
+        for i in range (-7,7):
+            pygame.draw.line(screen,color=[50,50,50],start_pos=[0,screen.get_height() / 2 + grid_space * i + 1],end_pos=[screen.get_width(),screen.get_height() / 2 + grid_space * i + 1],width=1)
+            pygame.draw.line(screen,color=[50,50,50],start_pos=[screen.get_width() / 2 + grid_space * i + 1,0],end_pos=[screen.get_width() / 2 + grid_space * i + 1,screen.get_height()],width=1)
 
     conv_fact = 1
     
@@ -130,15 +124,20 @@ def AnalogDraw1(screen,rdr_tgts,dis_range,sweep_angle):
 def AnalogDraw2(screen,rdr_tgts,dis_range,sweep_angle):
     global fonts
     col_mark = [205,205,205]
-       
+    
     #Handle Radar Targets
     for rdr_tgt in rdr_tgts:
         if rdr_tgt.age < 10:
-            col = [round(20 * rdr_tgt.fade / 1000,0) + 37, round(190 * rdr_tgt.fade / 1000,0) + 37, round(20 * rdr_tgt.fade / 1000,0) + 37]
-            sta_pos_x = rdr_tgt.pos_x + math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
-            sta_pos_y = rdr_tgt.pos_y + math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
-            end_pos_x = rdr_tgt.pos_x - math.cos(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
-            end_pos_y = rdr_tgt.pos_y - math.sin(rdr_tgt.ang * math.pi / 180) * 4 * rdr_tgt.sze / 2
+            col_adj = rdr_tgt.fade / 1000
+            col = [round(20 * col_adj,0) + 37, round(190 * col_adj,0) + 37, round(20 * col_adj,0) + 37]
+            
+            cos_result = math.cos(rdr_tgt.ang * math.pi / 180) * 2 * rdr_tgt.sze
+            sin_result = math.sin(rdr_tgt.ang * math.pi / 180) * 2 * rdr_tgt.sze
+            
+            sta_pos_x = rdr_tgt.pos_x + cos_result 
+            sta_pos_y = rdr_tgt.pos_y + sin_result 
+            end_pos_x = rdr_tgt.pos_x - cos_result
+            end_pos_y = rdr_tgt.pos_y - sin_result
             pygame.draw.line(screen,color=col,start_pos=[sta_pos_x, sta_pos_y],end_pos=[end_pos_x, end_pos_y], width=rdr_tgt.sze)
 
         rdr_tgt.fade = rdr_tgt.fade * 0.9965
@@ -295,14 +294,13 @@ def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats,temp):
         img = fonts[1].render("CPU Temp: " + str(round(temp,1)) + "°C", True, [250,250,250])
         screen.blit(img, (200,275))
 
-    img = fonts[1].render("Path:  " + os.getcwd(), True, [250,250,250])
-    screen.blit(img, (200,300))
 
 def DrawConfigError(screen,fonts):
     img = fonts[1].render("ERROR IN radar.cfg File", True, [255, 0, 0])
     screen.blit(img, (screen.get_width() / 2 - 100, screen.get_height() / 2))
     img = fonts[1].render("Please check configuration!", True, [255, 255, 255])
     screen.blit(img, (screen.get_width() / 2 - 115, screen.get_height() / 2 + 25))
+
 
 def DrawUI(screen,fonts,UIElement):
     if isinstance(UIElement, Classes.Button):
@@ -311,6 +309,7 @@ def DrawUI(screen,fonts,UIElement):
         DrawTextDisplay(screen,fonts,UIElement)
     elif isinstance(UIElement, Classes.Rectangle):
         DrawRectangle(screen,UIElement)
+
 
 def DrawButton(screen,fonts,button):
     #Draw Outer Rectangle
@@ -337,9 +336,11 @@ def DrawButton(screen,fonts,button):
     img = fonts[1].render(button.txt, True, [0, 0, 0])
     screen.blit(img, (button.pos[0] + button.sze[0] / 2 - img.get_width() / 2,button.pos[1] + button.sze[1] / 2 - img.get_height() / 2))
 
+
 def DrawTextDisplay(screen,fonts,display):
     img = fonts[display.fnt_sze].render(display.txt, True, [255, 255, 255])
     screen.blit(img, (display.pos[0] + display.sze[0] / 2 - img.get_width() / 2,display.pos[1] + display.sze[1] / 2 - img.get_height() / 2))
+
 
 def DrawRectangle(screen,rectanle):
     #Draw Inner Rectangle
@@ -347,6 +348,7 @@ def DrawRectangle(screen,rectanle):
     s.fill(rectanle.col)
     s.set_alpha(rectanle.alpha)
     screen.blit(s,rectanle.pos)
+
 
 def DrawCountryBorders(screen):
     global cntry_points_raw, cntry_points

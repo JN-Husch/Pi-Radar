@@ -56,8 +56,11 @@ def Level1(screen):
     UIElements.append(Classes.Button("GRID OFF",[screen.get_width() / 2 - 200,300],[190, 80],"GRID_False",not opts.grid))
     UIElements.append(Classes.Button("GRID ON",[screen.get_width() / 2 + 10,300],[190, 80],"GRID_True", opts.grid))
 
-    UIElements.append(Classes.Button("DEBUG OFF",[screen.get_width() / 2 - 200,400],[190, 80],"DEBUG_False",not opts.debug))
-    UIElements.append(Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,400],[190, 80],"DEBUG_True", opts.debug))
+    UIElements.append(Classes.Button("COUNTRIES OFF",[screen.get_width() / 2 - 200,400],[190, 80],"COUNTRIES_False",not opts.show_countries))
+    UIElements.append(Classes.Button("COUNTRIES ON",[screen.get_width() / 2 + 10,400],[190, 80],"COUNTRIES_True", opts.show_countries))
+
+    UIElements.append(Classes.Button("DEBUG OFF",[screen.get_width() / 2 - 200,500],[190, 80],"DEBUG_False",not opts.debug))
+    UIElements.append(Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,500],[190, 80],"DEBUG_True", opts.debug))
 
     #UIElements.append(Classes.Button("SAVE",[screen.get_width() / 2 - 200,700],[400, 80],"SAVE"))
     
@@ -93,6 +96,8 @@ def LoadOptions(path_mod,opts):
                                 opts.dis_range == 40
                             else:
                                 opts.dis_range = 5
+                        if "COUNTRIES=" in line:
+                            opts.show_countries = line.split("=")[1].lower().strip() == "true"
                         if "DEBUG=" in line:
                             opts.debug = line.split("=")[1].lower().strip() == "true"
                         if "GRID_LINES=" in line:
@@ -142,6 +147,9 @@ def SaveOptions(path_mod,opts):
                             elif opts.dis_range == 40:
                                 zoom = 4                        
                             lines[i] = "RANGE=" + str(zoom) + "\n"
+
+                        if "COUNTRIES=" in lines[i]:
+                            lines[i] = "COUNTRIES=" + str(opts.show_countries) + "\n"
 
                         if "DEBUG=" in lines[i]:
                             lines[i] = "DEBUG=" + str(opts.debug) + "\n"
