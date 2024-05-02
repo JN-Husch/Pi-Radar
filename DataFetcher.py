@@ -75,17 +75,9 @@ def fetchADSBData(homePos,url):
         print("Data Download Error: ", error)
         return None
 
+#Calculate Angle and slant range
 def AngleCalc(homePos,alt_buff, lat_buff, lng_buff):
-
-    dis_buff = 999.9
     dis_2D = 999.9
-
-    dis_3D = 999.9
-
-    d_alt = alt_buff * 0.3048 #ALT in Meters
-
-    d_alt = d_alt - homePos.alt
-
 
     d_lat = lat_buff - homePos.lat
     d_lng = lng_buff - homePos.lng

@@ -4,16 +4,18 @@ import os
 
 opts = Classes.Options()
 
+#Main function, called by main program loop
 def Main(screen,level,opts_in):
     global opts
     opts = opts_in
 
-    if level == 0:
-        return Level0(screen)
-    elif level == 1:
+    if level == 1:
         return Level1(screen)
+    elif level == 2:
+        return Level2(screen)
 
-def Level0(screen):
+#Menu Level 1 - Main Menu
+def Level1(screen):
     global opts
 
     range_unit = "NM"
@@ -42,8 +44,8 @@ def Level0(screen):
 
     return UIElements
 
-
-def Level1(screen):
+#Menu Level 2 - Options Menu
+def Level2(screen):
     global opts
 
     UIElements = []
@@ -71,6 +73,7 @@ def Level1(screen):
     return UIElements
 
 
+#Load Options from File
 def LoadOptions(path_mod,opts):
     if os.path.exists(path_mod + 'radar.cfg'):
         try:
@@ -115,6 +118,8 @@ def LoadOptions(path_mod,opts):
         print("radar.cfg does not exist!")
     return opts
 
+
+#Save Options to file
 def SaveOptions(path_mod,opts):
     if os.path.exists(path_mod + 'radar.cfg'):
         
@@ -170,6 +175,7 @@ def SaveOptions(path_mod,opts):
             print(f"Unexpected {err=}, {type(err)=}")
 
 
+#Show the numerical mode as string
 def getModeName(mode):
     name = "EMPTY"
 
