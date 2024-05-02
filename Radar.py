@@ -10,7 +10,7 @@ import Menu
 import threading
 import os
 
-version = "0.2.1"
+version = "0.3.0"
 
 # pygame setup
 pygame.init()

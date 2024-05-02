@@ -8,11 +8,15 @@ import os
 def loadCountryPoints():
     all_points = []
 
-    if not os.path.isfile('./res/countries.json'):
+    path_mod = ""
+    if os.name == 'posix' or os.name != 'nt':
+        path_mod = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop') + "/Pi-Radar/"
+    
+    if not os.path.exists(path_mod + '/res/countries.json'):
         return None
     
     #Load Json from file
-    f = open('./res/countries.json')
+    f = open(path_mod + '/res/countries.json')
     datas = json.load(f)
     
     #Itterate through json data to find geometries and rings

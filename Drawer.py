@@ -3,6 +3,7 @@ from pygame import gfxdraw
 import Classes
 import math
 import Utilities
+import os
 
 opt = [False,False,False]
 
@@ -283,6 +284,9 @@ def DrawDebugInfo(screen,fonts,mode,fps,dwnl_stats,temp):
     if temp != -99:
         img = fonts[1].render("CPU Temp: " + str(round(temp,1)) + "°C", True, [250,250,250])
         screen.blit(img, (200,275))
+
+    img = fonts[1].render("Path:  " + os.getcwd(), True, [250,250,250])
+    screen.blit(img, (200,300))
 
 def DrawConfigError(screen,fonts):
     img = fonts[1].render("ERROR IN radar.cfg File", True, [255, 0, 0])
