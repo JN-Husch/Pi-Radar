@@ -1,10 +1,19 @@
-# Pi Radar
+# Pi-Radar
 
-Pi Radar is a Python project to display basic ADS-B information from the https://airplanes.live API or a local receiver on a Raspberry Pi similar to an analog radar scope.
+Pi-Radar is a Python project to display basic ADS-B information from the https://airplanes.live API or a local receiver on a Raspberry Pi similar to an analog radar scope.
+
+</br>
+
+Demo Video (YouTube):
+
+[![Demo Video](https://img.youtube.com/vi/5sONIVzjySY/0.jpg)](https://www.youtube.com/watch?v=5sONIVzjySY)
+
+</br>
 
 There are several different styles of radar scopes available:
 
 ![Radar_Example](https://github.com/JN-Husch/Pi-Radar/assets/156305491/3c46a59e-bdc7-491c-96d8-f99feeb98f57)
+
 
 </br>
 
@@ -12,8 +21,10 @@ There are several different styles of radar scopes available:
 
 The harware below is used for the development of the Pi Radar. Other Hardware might also work...
 
-- Raspberry Pi 4 (Pi 5 is not recommended in combination with the round 5in WaveShare display due to the supplied connectors not correctly matching the Pi 5)
+- Raspberry Pi 4B (The Pi 5 is not recommended, as it is not yet compatible with the round 5in Displays supplied connectors)
 - Round 5in WaveShare Display (https://www.waveshare.com/5inch-1080x1080-lcd.htm)
+- (optional) Top mounted Raspberry Pi heatsink (please use one that does not use the Pi's mounting holes, as those are used by the display)
+
 
 ### 3D Printed Parts
 
