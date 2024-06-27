@@ -9,6 +9,7 @@ import Drawer
 import Menu
 import threading
 import os
+import platform
 
 version = "0.3.0"
 
@@ -24,11 +25,17 @@ cpu = None
 cpu_temp = -99
 
 #Choose available fonts based on operating system
-if os.name == 'nt':
+if platform.system() == 'Windows':
     font1 = pygame.font.SysFont('ocrastdopentype', 15)
     font2 = pygame.font.SysFont('ocrastdopentype', 20)
     font3 = pygame.font.SysFont('ocrastdopentype', 25)
-elif os.name == 'posix' or os.name != 'nt':
+
+elif platform.system() == 'Darwin':
+    font1 = pygame.font.SysFont('quicksand', 15)
+    font2 = pygame.font.SysFont('quicksand', 20)
+    font3 = pygame.font.SysFont('quicksand', 25)
+
+elif platform.system() == 'Linux':
     path_mod = os.path.join(os.path.join(os.path.expanduser('~')), '.config') + "/pi-radar/"
     pygame.mouse.set_visible(False)
     font1 = pygame.font.SysFont('quicksand', 15)
@@ -238,7 +245,8 @@ def task2():
         cpu_temp = cpu.temperature  
         time.sleep(1)
 
-if os.name == 'posix':
+#Only start the cpu temp task if the platform is linux
+if platform.system() == 'Linux':
     t2 = threading.Thread(target=task2)
     t2.start()
 
