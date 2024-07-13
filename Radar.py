@@ -11,7 +11,7 @@ import threading
 import os
 import platform
 
-version = "0.3.1"
+version = "0.3.0"
 
 # pygame setup
 pygame.init()
