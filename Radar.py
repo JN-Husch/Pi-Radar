@@ -11,7 +11,7 @@ import threading
 import os
 import platform
 
-version = "0.3.0"
+version = "0.3.1"
 
 # pygame setup
 pygame.init()
@@ -167,7 +167,12 @@ def DataDrawing():
                                         opts.force_update = True
 
                                     if "SAVE" in UIElement.tag:
-                                        Menu.SaveOptions(path_mod,opts)            
+                                        Menu.SaveOptions(path_mod,opts)
+
+                                    if UIElement.tag == "SHTDWN":
+                                        run = False
+                                        if platform.system() == 'Linux':
+                                            os.system("sudo shutdown now -h")       # Sending the shutdown command to the OS         
 
             #Mouse or Touchscreen release event
             elif event.type == pygame.MOUSEBUTTONUP or event.type == pygame.FINGERUP:

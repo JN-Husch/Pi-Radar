@@ -65,10 +65,12 @@ def Level2(screen):
     UIElements.append(Classes.Button("DEBUG ON",[screen.get_width() / 2 + 10,500],[190, 80],"DEBUG_True", opts.debug))
 
     #UIElements.append(Classes.Button("SAVE",[screen.get_width() / 2 - 200,700],[400, 80],"SAVE"))
-    
+
     UIElements.append(Classes.Text("Data Source:",[screen.get_width() / 2 - 200,650],[400, 80],fnt_sze=1))
     UIElements.append(Classes.Text(opts.source,[screen.get_width() / 2 - 200,700],[400, 80],fnt_sze=1))
     UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
+    
+    UIElements.append(Classes.Button("SHUT DOWN",[screen.get_width() / 2 + -100,950],[200, 80],"SHTDWN"))
 
     return UIElements
 
