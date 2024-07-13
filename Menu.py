@@ -1,6 +1,7 @@
 import pygame
 import Classes
 import os
+import platform
 
 opts = Classes.Options()
 
@@ -70,7 +71,8 @@ def Level2(screen):
     UIElements.append(Classes.Text(opts.source,[screen.get_width() / 2 - 200,700],[400, 80],fnt_sze=1))
     UIElements.append(Classes.Button("RETURN",[screen.get_width() / 2 - 200,800],[400, 80],"RETURN"))
     
-    UIElements.append(Classes.Button("SHUT DOWN",[screen.get_width() / 2 + -100,950],[200, 80],"SHTDWN"))
+    if platform.system() == 'Linux':
+        UIElements.append(Classes.Button("SHUT DOWN",[screen.get_width() / 2 + -100,950],[200, 80],"SHTDWN"))
 
     return UIElements
 
